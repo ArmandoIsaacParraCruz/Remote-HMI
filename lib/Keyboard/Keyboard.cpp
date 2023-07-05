@@ -12,5 +12,4 @@ char Keyboard::get_valid_key(std::vector<char>& validKeys)
             }
         }
     }
-    return keyPressed;
 }
