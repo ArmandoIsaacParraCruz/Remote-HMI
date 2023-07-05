@@ -64,23 +64,10 @@ void GUI::highlight_current_option_in_main_menu(const uint8_t &option)
 	lcd.drawString("Y SALIDA DE DATOS",70, 180);
 }
 
-void GUI::show_select_places_background_elements(const bool selected_places[], const uint8_t numPlaces)
+void GUI::show_select_places_menu_background_elements(const bool selectedPlaces[], const uint8_t numPlaces)
 {
-    int32_t imageX = 10,imageY = 0, posX = 17, color;
 	lcd.fillScreen(MY_SKYBLUE);
-	lcd.pushImage(imageX, imageY, imageWidth, imageHeight, multiHeaterStirrerImage);
-	lcd.setTextColor(MY_BLACK);
-    
-	lcd.setFreeFont(FF47);
-	for(uint8_t i = 0; i < numPlaces; ++i, posX+=50) {
-		if(selected_places[i]) {
-			color = MY_GREEN;
-		} else {
-			color = MY_SILVER;
-		}
-		lcd.fillRect(posX, 3, 36, 36, color);
-		lcd.drawString((String)(i+1),posX + 7, 6);
-	}
+	show_selected_places(selectedPlaces, numPlaces);
 	lcd.fillRect(40, 85, 250, 40, MY_YELLOW);
 	lcd.fillTriangle(223, 222, 223, 232, 233, 227, MY_BLACK);
 	lcd.fillTriangle(220, 222, 220, 232, 210, 227, MY_BLACK);
@@ -92,6 +79,23 @@ void GUI::show_select_places_background_elements(const bool selected_places[], c
 	lcd.drawString("B: REGRESAR", 10, 220, FONT2);
 	lcd.drawString("C: CONTINUAR", 190, 205, FONT2);
 	lcd.drawString("D:", 190, 220, FONT2);
+}
+
+void GUI::show_selected_places(const bool selectedPlaces[], const uint8_t numPlaces)
+{
+	int32_t imageX = 10,imageY = 0, posX = 17, color;
+	lcd.pushImage(imageX, imageY, imageWidth, imageHeight, multiHeaterStirrerImage);
+	lcd.setTextColor(MY_BLACK);
+	lcd.setFreeFont(FF47);
+	for(uint8_t currentPlace = 0; currentPlace < numPlaces; ++currentPlace, posX+=50) {
+		if(selectedPlaces[currentPlace]) {
+			color = MY_GREEN;
+		} else {
+			color = MY_SILVER;
+		}
+		lcd.fillRect(posX, 3, 36, 36, color);
+		lcd.drawString((String)(currentPlace+1),posX + 7, 6);
+	}
 }
 
 void GUI::highlight_current_place_in_select_places_menu(const bool selectedPlaces[], const uint8_t &currentPlace, const uint8_t numPlaces)
@@ -144,3 +148,160 @@ void GUI::highlight_current_place_in_select_places_menu(const bool selectedPlace
 	lcd.drawString(textOption, 180, 170, FONT2);
 }
 
+void GUI::show_set_up_setpoints_and_times_menu_background_elements(const bool selectedPlaces[], const uint8_t numPlaces, const uint8_t &currentProcess)
+{
+	lcd.fillScreen(MY_SKYBLUE);
+	show_selected_places(selectedPlaces, numPlaces);
+	lcd.fillRect(10, 100, 300, 100, MY_WHITE);
+	lcd.fillRect(65, 80, 170, 20, MY_WHITE);
+	lcd.setFreeFont(TT1);
+	lcd.setTextColor(MY_BLACK);
+	lcd.drawString("PROCESO: " + (String)(currentProcess + 1) + " DE 20", 70, 80, FONT2);
+	clean_set_up_setpoints_and_times_menu_space();
+}
+
+
+void GUI::clean_set_up_setpoints_and_times_menu_space()
+{
+	lcd.fillRect(10, 100, 300, 100, MY_WHITE);
+	lcd.fillRect(0, 200, 320, 40, MY_SKYBLUE);
+	lcd.setFreeFont(TT1);
+	lcd.setTextColor(MY_BLACK);
+	lcd.drawString("A: CONFIGURAR", 10, 205, FONT2);
+	lcd.drawString("B: REGRESAR", 10, 220, FONT2);
+	lcd.drawString("C: CONTINUAR", 190, 205, FONT2);
+	lcd.drawString("D:", 190, 220, FONT2);
+	lcd.fillTriangle(213, 222, 223, 222, 218, 232, MY_BLACK);
+}
+
+void GUI::update_function_temperature_type_current_process(bool tempFunction)
+{
+	lcd.setFreeFont(TT1);
+	lcd.setTextColor(MY_BLACK);
+	lcd.drawString("FUNC. DE TEMPERATURA:", 30, 100, FONT2);
+	if(tempFunction) {
+		lcd.drawString("CONSTANTE", 200, 100, FONT2);
+	} else {
+		lcd.drawString("RAMPA", 230, 100, FONT2);
+	}
+}
+
+ void GUI::show_set_up_temperature_function_type_menu_background_elements()
+ {
+	lcd.fillRect(10, 100, 300, 100, MY_WHITE);
+	lcd.fillRect(0, 200, 320, 40, MY_SKYBLUE);
+	lcd.setFreeFont(TT1);
+	lcd.setTextColor(MY_BLACK);
+	lcd.drawString("A: ELEJIR", 10, 205, FONT2);
+	lcd.drawString("D:", 190, 205, FONT2);
+	lcd.fillTriangle(213, 207, 223, 207, 218, 217, MY_BLACK);
+	lcd.drawString("ESCOJA UNA FUNC. DE TEMPERATURA", 50, 100, FONT2);
+	lcd.drawString("Y PRESIONE 'A' PARA SELECCIONARLA", 50, 120, FONT2);
+	lcd.drawString("CONSTANTE", 70, 150, FONT2);
+	lcd.drawString("RAMPA", 70, 170, FONT2);
+ }
+
+ void GUI::show_current_option_set_up_temperature_function_type_menu(const uint8_t &currentOption)
+ {
+	uint8_t currentPosition, previousPosition;
+	switch (currentOption)
+	{
+		case 1:
+			previousPosition = 170;
+			currentPosition = 150;
+		break;
+
+		case 2:
+			previousPosition = 150;
+			currentPosition = 170;
+		break;
+	}
+
+	lcd.fillRect(50, previousPosition, 20, 20, MY_WHITE);
+	lcd.fillTriangle(50, currentPosition, 50, currentPosition + 10, 60, currentPosition + 5, MY_BLACK);
+ }
+
+void GUI::update_temperatures_setpoints_current_process(const uint16_t &initTemp, const uint16_t &finalTemp)
+{
+	String initTempText, finalTempText;
+	if(initTemp == 0) {
+		initTempText = "SIN CONFIGURAR";
+	} else {
+		lcd.drawCircle(200, 122, 2, MY_BLACK);
+		lcd.drawString("C", 205, 120, FONT2);
+		initTempText = (String)(initTemp);
+	}
+
+	if(finalTemp == 0) {
+		finalTempText = "SIN CONFIGURAR";
+	} else {
+		finalTempText = (String)(finalTemp);
+		lcd.drawCircle(200, 142, 2, MY_BLACK);
+		lcd.drawString("C", 205, 140, FONT2);
+	}
+	lcd.setFreeFont(TT1);
+	lcd.setTextColor(MY_BLACK);
+	lcd.drawString("TEMPERATURAS:", 30, 120, FONT2);
+	lcd.drawString("INICIAL: " + initTempText, 140, 120, FONT2);
+	lcd.drawString("FINAL: " + finalTempText, 140, 140, FONT2);
+}
+
+void GUI::update_stirring_setpoints_current_process(const uint16_t &stirringSetpoint)
+{
+	String stirringSetpointText;
+	if(stirringSetpoint == 0) {
+		stirringSetpointText = "SIN CONFIGURAR";
+	} else {
+		stirringSetpointText = (String)(stirringSetpoint) + " " + "RPM";
+	}
+
+	lcd.setFreeFont(TT1);
+	lcd.setTextColor(MY_BLACK);
+	lcd.drawLine(80,160,85,157, MY_BLACK);
+	lcd.drawString("AGITACION: " + stirringSetpointText, 30, 160, FONT2);
+}
+
+void GUI::update_duration_current_process(const uint32_t &processDuration)
+{
+	String processDurationText;
+	if(processDuration == 0) {
+		processDurationText = "SIN CONFIGURAR";
+	} else {
+		processDurationText = (String)(processDuration) + " " +"MIN";
+	}
+
+	lcd.setFreeFont(TT1);
+	lcd.setTextColor(MY_BLACK);
+	lcd.drawLine(80,180,85,177, MY_BLACK);
+	lcd.drawString("DURACION: " + processDurationText, 30, 180, FONT2);
+}
+
+void GUI::show_current_option_set_up_setpoints_and_times_menu(uint8_t &currentOption)
+{
+	uint8_t currentPosition, previousPosition;
+	switch (currentOption)
+	{
+		case 1:
+			previousPosition = 180;
+			currentPosition = 100;
+		break;
+
+		case 2:
+			previousPosition = 100;
+			currentPosition = 120;
+		break;
+
+		case 3:
+			previousPosition = 120;
+			currentPosition = 160;
+		break;
+
+		case 4:
+			previousPosition = 160;
+			currentPosition = 180;
+		break;
+	}
+
+	lcd.fillRect(10, previousPosition, 20, 20, MY_WHITE);
+	lcd.fillTriangle(10, currentPosition, 10, currentPosition + 10, 20, currentPosition + 5, MY_BLACK);
+}

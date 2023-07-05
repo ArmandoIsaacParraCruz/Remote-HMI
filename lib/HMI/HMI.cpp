@@ -11,25 +11,27 @@ HMI::HMI()
 /**This function initializes the executionSpecifications structure with default values
  * Esta función inicializa la estructura executionSpecifications con valores por defecto
 */
-void HMI::initialize_execution_specifications_struct()
+void HMI::initialize_processes_specifications_struct()
 {
     // Initialize the array of selected places as false for all places
     // Inicizaliza el arreglo de plazas seleccionadas como falso
     for (uint8_t i = 0; i < NUMBER_OF_PLACES; ++i) {
-        executionSpecifications.selectedPlaces[i] = false;
+        processesSpecifications.selectedPlaces[i] = false;
     }
 
     // Initialize the temperature setpoints and stirring setpoints
     // Inicializa los setpoints de temeperatura y agitación en 0
-    for (uint8_t i = 0; i < TASK; ++i) {
-        executionSpecifications.temperatureSetpoint[i].temperature = 0;
-        executionSpecifications.temperatureSetpoint[i].tempFunction = TemperatureFunctionType::constant;
-        executionSpecifications.stirringSetpoints[i] = 0;
+    for (uint8_t i = 0; i < NUMBER_OF_PROCESS; ++i) {
+        processesSpecifications.temperatureSetpoints[i].initialTemperature = 0;
+        processesSpecifications.temperatureSetpoints[i].finalTemperature = 0;
+        processesSpecifications.temperatureSetpoints[i].tempFunction = TemperatureFunctionType::constant;
+        processesSpecifications.stirringSetpoints[i] = 0;
+        processesSpecifications.processDuration[i] = 0;
     }
 
     // Set the configured task to zero
     // Asigna cero a las tareas configuradas
-    executionSpecifications.configuredTask = 0;
+    processesSpecifications.configuredTask = 0;
 }
 
 /**This is the main loop program in the project
@@ -89,11 +91,11 @@ void HMI::main_menu()
                 break;
 
             case 'C':
-                option--;
+                --option;
                 break;
             
             case 'D':
-                option++;
+                ++option;
                 break;
         }
 
@@ -112,37 +114,37 @@ void HMI::main_menu()
 */
 void HMI::define_execution_specifications()
 {
-    initialize_execution_specifications_struct();
+    initialize_processes_specifications_struct();
     uint8_t currentMenu = 0;
-    MenuNavigationOptions action;
-    while(action != MenuNavigationOptions::Exit)
+    MenuNavigationOptions menuOption = MenuNavigationOptions::Forward;
+    while(menuOption != MenuNavigationOptions::Exit)
     {
          switch(currentMenu)
         {
             case 0:
-                action = select_places();
-                if(action == MenuNavigationOptions::Forward) {
+                menuOption = select_places();
+                if(menuOption == MenuNavigationOptions::Forward) {
                     currentMenu= 1;
-                } else if(action == MenuNavigationOptions::Backward) {
-                    action = MenuNavigationOptions::Exit;
+                } else {
+                    menuOption = MenuNavigationOptions::Exit;
                 }
             break;
 
             case 1:
-                action = set_up_setpoints_and_times();
-                if(action == MenuNavigationOptions::Forward) {
+                menuOption = set_up_processes();
+                if(menuOption == MenuNavigationOptions::Forward) {
                     currentMenu = 2;
-                } else if(action == MenuNavigationOptions::Backward) {
+                } else if(menuOption == MenuNavigationOptions::Backward) {
                     currentMenu = 0;
                 }
             break;
 
             case 2:
-                action = summarize_the_defined_execution_specifications();
-                if(action == MenuNavigationOptions::Backward) {
+                menuOption = summarize_the_defined_execution_specifications();
+                if(menuOption == MenuNavigationOptions::Backward) {
                     currentMenu = 1;
-                } else if(action == MenuNavigationOptions::Forward) {
-                    action = MenuNavigationOptions::Exit;
+                } else {
+                    menuOption = MenuNavigationOptions::Exit;
                 }
             break;
         }
@@ -160,19 +162,19 @@ MenuNavigationOptions HMI::select_places()
     uint8_t currentPlace = 0;
     char keyPressed = NO_KEY;
     std::vector<char> validKeys = {'A', 'B', 'C', 'D'};
-    gui.show_select_places_background_elements(executionSpecifications.selectedPlaces, NUMBER_OF_PLACES);
+    gui.show_select_places_menu_background_elements(processesSpecifications.selectedPlaces, NUMBER_OF_PLACES);
     while (currentPlace >= 0 && currentPlace < NUMBER_OF_PLACES)
     {
-        gui.highlight_current_place_in_select_places_menu(executionSpecifications.selectedPlaces, currentPlace, NUMBER_OF_PLACES);
+        gui.highlight_current_place_in_select_places_menu(processesSpecifications.selectedPlaces, currentPlace, NUMBER_OF_PLACES);
         keyPressed = keyboard.get_valid_key(validKeys);
 
         switch (keyPressed)
         {
             case 'A':
-                if(executionSpecifications.selectedPlaces[currentPlace]) {
-                    executionSpecifications.selectedPlaces[currentPlace] = false;
+                if(processesSpecifications.selectedPlaces[currentPlace]) {
+                    processesSpecifications.selectedPlaces[currentPlace] = false;
                 } else {
-                    executionSpecifications.selectedPlaces[currentPlace] = true;
+                   processesSpecifications.selectedPlaces[currentPlace] = true;
                 }
             break;
             
@@ -186,7 +188,7 @@ MenuNavigationOptions HMI::select_places()
                 }
                 break;
             case 'D':
-                currentPlace++;
+                ++currentPlace;
                 if(currentPlace >= NUMBER_OF_PLACES) {
                     currentPlace = 0;
                 }
@@ -194,7 +196,7 @@ MenuNavigationOptions HMI::select_places()
         }
     }
     
-    return MenuNavigationOptions();
+    return MenuNavigationOptions::Exit;
 }
 
 bool HMI::validate_selected_places_array()
@@ -202,7 +204,7 @@ bool HMI::validate_selected_places_array()
     bool validArray = false;
     for(uint8_t currentPlace = 0; currentPlace < NUMBER_OF_PLACES; ++currentPlace)
     {
-        if(executionSpecifications.selectedPlaces[currentPlace]) {
+        if(processesSpecifications.selectedPlaces[currentPlace]) {
             validArray = true;
             break;
         }
@@ -211,10 +213,146 @@ bool HMI::validate_selected_places_array()
 }
 
 
-MenuNavigationOptions HMI::set_up_setpoints_and_times()
+MenuNavigationOptions HMI::set_up_processes()
+{
+    uint8_t currentProcess = 0;
+    MenuNavigationOptions menuOption = MenuNavigationOptions::Forward;
+    while (menuOption != MenuNavigationOptions::Exit)
+    {
+        menuOption = set_up_setpoints_and_times(currentProcess);
+        if(menuOption == MenuNavigationOptions::Forward) {
+            ++currentProcess;
+        } else if(menuOption == MenuNavigationOptions::Backward) {
+            if(currentProcess == 0) {
+                return MenuNavigationOptions::Backward;
+            } else {
+             --currentProcess;
+            }
+            
+        }
+    }
+    
+    return MenuNavigationOptions::Exit;
+}
+
+MenuNavigationOptions HMI::set_up_setpoints_and_times(const uint8_t &currentProcess)
+{
+    uint8_t option = 1;
+    char keyPressed = NO_KEY;
+    MenuNavigationOptions menuOption = MenuNavigationOptions::Forward;
+    std::vector<char> validKeys = {'A', 'B', 'C', 'D'};
+    gui.show_set_up_setpoints_and_times_menu_background_elements(processesSpecifications.selectedPlaces, NUMBER_OF_PLACES, currentProcess);
+    while(menuOption != MenuNavigationOptions::Exit)
+    {
+        update_specifications_current_process(currentProcess);
+        gui.show_current_option_set_up_setpoints_and_times_menu(option);
+        keyPressed = keyboard.get_valid_key(validKeys);
+        switch (keyPressed)
+        {
+            case 'A':
+                switch (option)
+                {
+                    case 1:
+                        set_up_temperatura_function_type(currentProcess);
+                    break;
+
+                    case 2:
+                        set_up_temperature_setpoints(currentProcess);
+                    break;
+
+                    case 3:
+                        set_up_stirrering_setpoints(currentProcess);
+                    break;
+
+                    case 4:
+                        set_up_process_duration(currentProcess);
+                    break;
+                }
+            break;
+
+            case 'B':
+                return MenuNavigationOptions::Backward;
+            break;
+
+            case 'C':
+                
+            break;
+
+            case 'D':
+                ++option;
+                if(option > 4) {
+                    option = 1;
+                }
+               
+            break;
+        }
+
+        
+    }
+    return MenuNavigationOptions();
+}
+
+void HMI::update_specifications_current_process(const uint8_t &currentProcess)
+{
+    if(processesSpecifications.temperatureSetpoints[currentProcess].tempFunction == constant) {
+        gui.update_function_temperature_type_current_process(true);
+    } else {
+        gui.update_function_temperature_type_current_process(false);
+    }
+
+    gui.update_temperatures_setpoints_current_process(processesSpecifications.temperatureSetpoints[currentProcess].initialTemperature,
+                                                        processesSpecifications.temperatureSetpoints[currentProcess].finalTemperature);
+
+    gui.update_stirring_setpoints_current_process(processesSpecifications.stirringSetpoints[currentProcess]);
+    gui.update_duration_current_process(processesSpecifications.processDuration[currentProcess]);
+}
+
+void HMI::set_up_temperatura_function_type(const uint8_t &currentProcess)
+{
+    uint8_t option = 1;
+    char keyPressed = NO_KEY;
+    MenuNavigationOptions menuOption = MenuNavigationOptions::Forward;
+    std::vector<char> validKeys = {'A', 'D'};
+    gui.show_set_up_temperature_function_type_menu_background_elements();
+    while (menuOption != MenuNavigationOptions::Exit) 
+    {
+        gui.show_current_option_set_up_temperature_function_type_menu(option);
+        keyPressed = keyboard.get_valid_key(validKeys);
+        switch (keyPressed)
+        {
+            case 'A':
+                if(option == 1) {
+                    processesSpecifications.temperatureSetpoints[currentProcess].tempFunction = TemperatureFunctionType::constant;
+                } else {
+                    processesSpecifications.temperatureSetpoints[currentProcess].tempFunction  = TemperatureFunctionType::ramp;
+                }
+                menuOption = MenuNavigationOptions::Exit;
+            break;
+        
+            case 'D':
+                ++option;
+                if(option > 2) {
+                    option = 1;
+                }
+            break;
+        }
+    }
+     gui.clean_set_up_setpoints_and_times_menu_space();
+}
+void HMI::set_up_temperature_setpoints(const uint8_t &currentProcess)
 {
     
-    return MenuNavigationOptions();
+    gui.clean_set_up_setpoints_and_times_menu_space();
+}
+void HMI::set_up_stirrering_setpoints(const uint8_t &currentProcess)
+{
+
+    gui.clean_set_up_setpoints_and_times_menu_space();
+}
+void HMI::set_up_process_duration(const uint8_t &currentProcess)
+{
+
+    gui.clean_set_up_setpoints_and_times_menu_space();
 }
 
 MenuNavigationOptions HMI::summarize_the_defined_execution_specifications()
