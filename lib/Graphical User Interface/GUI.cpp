@@ -25,24 +25,21 @@ void GUI::show_UAM_logo()
 
 void GUI::show_main_menu_background_elements()
 {
-    uint32_t posX = 45, posY = 10, width = 240, height = 60, spacing = 10,
-    x1_1 = 35, y1_1 = 230, x2_1 = 45, y2_1 = 230, x3_1 = 40, y3_1 = 220,
-    x1_2 = 135, y1_2 = 220, x2_2 = 145, y2_2 = 220, x3_2 = 140, y3_2 = 230;
     lcd.fillScreen(MY_SKYBLUE);
-    lcd.fillRect(posX, posY, width, height, MY_BLACK);
-    lcd.fillRect(posX, posY + height + spacing, width, height, MY_BLACK);
-    lcd.fillRect(posX, posY + 2*height + 2*spacing, width, height, MY_BLACK);
+    lcd.fillRect(45, 10, 240, 60, MY_BLACK);
+    lcd.fillRect(45, 80, 240, 60, MY_BLACK);
+    lcd.fillRect(45, 150, 240, 60, MY_BLACK);
 
-    lcd.fillTriangle(x1_1, y1_1, x2_1, y2_1, x3_1, y3_1, MY_BLACK);
-    lcd.fillTriangle(x1_2, y1_2, x2_2, y2_2, x3_2, y3_2, MY_BLACK);
+    lcd.fillTriangle(35, 230, 45, 230, 40, 220, MY_BLACK);
+    lcd.fillTriangle(135, 220, 145, 220, 140, 230, MY_BLACK);
     lcd.setFreeFont(FMB9);
     lcd.setTextColor(MY_BLACK);
-    lcd.drawString("C:", x1_1 - 2 * spacing, y3_1 - 2);
-    lcd.drawString("D:", x1_2 - 2 * spacing, y1_2 - 2);
-    lcd.drawString("A: ELEGIR", x1_2 + 8 * spacing, y1_2 - 2);
+    lcd.drawString("C:", 15, 218);
+    lcd.drawString("D:", 115, 218);
+    lcd.drawString("A: ELEGIR", 215, 218);
 }
 
-void GUI::highlight_current_option_in_main_menu(uint8_t option)
+void GUI::highlight_current_option_in_main_menu(const uint8_t& option)
 {
     uint32_t posX = 50,posY = 15, width = 230, height = 50, spacing = 0, color;
 
@@ -65,4 +62,36 @@ void GUI::highlight_current_option_in_main_menu(uint8_t option)
 
     lcd.drawString("ESTADO DEL ENLACE",70, 165);
 	lcd.drawString("Y SALIDA DE DATOS",70, 180);
+}
+
+void GUI::show_select_places_background_elements(const bool selected_places[], const uint8_t numPlaces)
+{
+    int32_t imageX = 10,imageY = 0, posX = 17, color;
+	lcd.fillScreen(MY_SKYBLUE);
+	lcd.pushImage(imageX, imageY, imageWidth, imageHeight, multiHeaterStirrerImage);
+	lcd.setTextColor(MY_BLACK);
+    
+	lcd.setFreeFont(FF47);
+	for(uint8_t i = 0; i < numPlaces; ++i, posX+=50) {
+		if(selected_places[i]) {
+			color = MY_GREEN;
+		} else {
+			color = MY_SILVER;
+		}
+		lcd.fillRect(posX, 3, 36, 36, color);
+		lcd.drawString((String)(i+1),posX + 7, 6);
+	}
+	lcd.fillRect(40, 150, 250, 50, MY_BLACK);
+	lcd.fillTriangle(223, 222, 223, 232, 233, 227, MY_BLACK);
+	lcd.fillTriangle(220, 222, 220, 232, 210, 227, MY_BLACK);
+	lcd.setFreeFont(FMB9);
+	lcd.setTextColor(MY_BLACK);
+	lcd.drawString("A:SELECCIONAR", 10, 205);
+	lcd.drawString("B:REGRESAR", 10, 220);
+	lcd.drawString("C:CONTINUAR", 190, 205);
+	lcd.drawString("D:", 190, 220);
+}
+
+void GUI::highlight_current_place_in_select_places_menu(const uint8_t &num_place)
+{
 }
