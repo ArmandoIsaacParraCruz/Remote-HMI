@@ -36,10 +36,10 @@ void GUI::show_main_menu_background_elements()
     lcd.setTextColor(MY_BLACK);
     lcd.drawString("C:", 15, 218);
     lcd.drawString("D:", 115, 218);
-    lcd.drawString("A: ELEGIR", 215, 218);
+    lcd.drawString("A:ELEGIR", 215, 218);
 }
 
-void GUI::highlight_current_option_in_main_menu(const uint8_t& option)
+void GUI::highlight_current_option_in_main_menu(const uint8_t &option)
 {
     uint32_t posX = 50,posY = 15, width = 230, height = 50, spacing = 0, color;
 
@@ -81,17 +81,66 @@ void GUI::show_select_places_background_elements(const bool selected_places[], c
 		lcd.fillRect(posX, 3, 36, 36, color);
 		lcd.drawString((String)(i+1),posX + 7, 6);
 	}
-	lcd.fillRect(40, 150, 250, 50, MY_BLACK);
+	lcd.fillRect(40, 85, 250, 40, MY_YELLOW);
 	lcd.fillTriangle(223, 222, 223, 232, 233, 227, MY_BLACK);
 	lcd.fillTriangle(220, 222, 220, 232, 210, 227, MY_BLACK);
-	lcd.setFreeFont(FMB9);
+	lcd.setFreeFont(TT1);
 	lcd.setTextColor(MY_BLACK);
-	lcd.drawString("A:SELECCIONAR", 10, 205);
-	lcd.drawString("B:REGRESAR", 10, 220);
-	lcd.drawString("C:CONTINUAR", 190, 205);
-	lcd.drawString("D:", 190, 220);
+	lcd.drawString("SELECCIONE AL MENOS UNA PLAZA", 50, 90, FONT2);
+	lcd.drawString("PARA CONTINUAR", 110, 105, FONT2);
+	lcd.drawString("A: SELEC./DESELEC.", 10, 205, FONT2);
+	lcd.drawString("B: REGRESAR", 10, 220, FONT2);
+	lcd.drawString("C: CONTINUAR", 190, 205, FONT2);
+	lcd.drawString("D:", 190, 220, FONT2);
 }
 
-void GUI::highlight_current_place_in_select_places_menu(const uint8_t &num_place)
+void GUI::highlight_current_place_in_select_places_menu(const bool selectedPlaces[], const uint8_t &currentPlace, const uint8_t numPlaces)
 {
+	uint32_t boxColorNumber, boxColorText;
+	uint8_t previousPlace, spacing;
+	String textOption, textPlaceStatus;
+
+	lcd.setFreeFont(FF47);
+
+	if(currentPlace == 0) {
+		previousPlace = numPlaces - 1;
+	} else {
+		previousPlace = currentPlace - 1;
+	}
+
+    if(selectedPlaces[previousPlace]) {
+		 boxColorNumber = MY_GREEN;
+	} else {
+		boxColorNumber = MY_SILVER;
+	}
+
+	lcd.fillRect(17 + 50 * previousPlace, 3, 36, 36, boxColorNumber);
+	lcd.drawString((String)(previousPlace + 1), 24 + 50 * previousPlace, 6);
+	lcd.fillRect(17 + 50 * currentPlace, 3, 36, 36, MY_RED);
+
+    if(selectedPlaces[currentPlace]) {
+		boxColorNumber= MY_GREEN;
+		boxColorText = MY_SILVER;
+		textOption = "DESELECCIONAR";
+		textPlaceStatus = "SELECCIONADA";
+		spacing = 20;
+	} else {
+		boxColorNumber = MY_SILVER;
+		boxColorText = MY_GREEN;
+		textOption = "SELECCIONAR";
+		textPlaceStatus = "NO SELECCIONADA";
+		spacing = 0;
+	}
+	
+	lcd.fillRect(20 + 50*currentPlace, 6, 30, 30, boxColorNumber);
+	lcd.fillRect(40, 169, 250, 20, boxColorText);
+	lcd.drawString((String)(currentPlace + 1), 24 + 50 * currentPlace, 6);
+	lcd.fillRect(40, 139, 250, 20, boxColorNumber);
+	lcd.setFreeFont(TT1);
+	lcd.drawString("PLAZA", 85, 140, FONT2);
+	lcd.drawString((String)(currentPlace + 1) + ":", 130, 140, FONT2);
+	lcd.drawString(textPlaceStatus, 150, 140, FONT2);
+	lcd.drawString("PRESIONE 'A' PARA", 55, 170, FONT2);
+	lcd.drawString(textOption, 180, 170, FONT2);
 }
+

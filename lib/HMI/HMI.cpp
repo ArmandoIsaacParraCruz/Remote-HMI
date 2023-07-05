@@ -27,10 +27,6 @@ void HMI::initialize_execution_specifications_struct()
         executionSpecifications.stirringSetpoints[i] = 0;
     }
 
-    // Set the temperature sensor type as thermocouples
-    // Asigna termopar como tipo de sensor
-    executionSpecifications.sensor = TemperatureSensorType::thermocouples;
-
     // Set the configured task to zero
     // Asigna cero a las tareas configuradas
     executionSpecifications.configuredTask = 0;
@@ -130,7 +126,7 @@ void HMI::define_execution_specifications()
                 } else if(action == MenuNavigationOptions::Backward) {
                     action = MenuNavigationOptions::Exit;
                 }
-                break;
+            break;
 
             case 1:
                 action = set_up_setpoints_and_times();
@@ -139,7 +135,7 @@ void HMI::define_execution_specifications()
                 } else if(action == MenuNavigationOptions::Backward) {
                     currentMenu = 0;
                 }
-                break;
+            break;
 
             case 2:
                 action = summarize_the_defined_execution_specifications();
@@ -148,7 +144,7 @@ void HMI::define_execution_specifications()
                 } else if(action == MenuNavigationOptions::Forward) {
                     action = MenuNavigationOptions::Exit;
                 }
-                break;
+            break;
         }
 
     }
@@ -161,20 +157,63 @@ void HMI::define_execution_specifications()
 */
 MenuNavigationOptions HMI::select_places()
 {
-    uint8_t num_place = 0;
+    uint8_t currentPlace = 0;
     char keyPressed = NO_KEY;
     std::vector<char> validKeys = {'A', 'B', 'C', 'D'};
     gui.show_select_places_background_elements(executionSpecifications.selectedPlaces, NUMBER_OF_PLACES);
-    while (num_place >= 0 && num_place < NUMBER_OF_PLACES)
+    while (currentPlace >= 0 && currentPlace < NUMBER_OF_PLACES)
     {
-            gui.highlight_current_place_in_select_places_menu(num_place);
+        gui.highlight_current_place_in_select_places_menu(executionSpecifications.selectedPlaces, currentPlace, NUMBER_OF_PLACES);
+        keyPressed = keyboard.get_valid_key(validKeys);
+
+        switch (keyPressed)
+        {
+            case 'A':
+                if(executionSpecifications.selectedPlaces[currentPlace]) {
+                    executionSpecifications.selectedPlaces[currentPlace] = false;
+                } else {
+                    executionSpecifications.selectedPlaces[currentPlace] = true;
+                }
+            break;
+            
+            case 'B' :
+                return MenuNavigationOptions::Exit;
+            break;
+
+            case 'C':
+                if(validate_selected_places_array()) {
+                    return MenuNavigationOptions::Forward;
+                }
+                break;
+            case 'D':
+                currentPlace++;
+                if(currentPlace >= NUMBER_OF_PLACES) {
+                    currentPlace = 0;
+                }
+            break;
+        }
     }
     
     return MenuNavigationOptions();
 }
 
+bool HMI::validate_selected_places_array()
+{
+    bool validArray = false;
+    for(uint8_t currentPlace = 0; currentPlace < NUMBER_OF_PLACES; ++currentPlace)
+    {
+        if(executionSpecifications.selectedPlaces[currentPlace]) {
+            validArray = true;
+            break;
+        }
+    }
+    return validArray;
+}
+
+
 MenuNavigationOptions HMI::set_up_setpoints_and_times()
 {
+    
     return MenuNavigationOptions();
 }
 
