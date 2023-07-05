@@ -8,7 +8,6 @@
 #define NUMBER_OF_PLACES 6
 #define TASK 20
 
-enum TemperatureSensorType{infrared, thermocouples};
 enum TemperatureFunctionType{constant, ramp};
 enum class MenuNavigationOptions{Forward, Backward, Exit};
 
@@ -18,7 +17,6 @@ struct TemperatureSetpoint {
 };
 
 struct ExecutionSpecifications{
-    TemperatureSensorType sensor;
     bool selectedPlaces[NUMBER_OF_PLACES];
     TemperatureSetpoint temperatureSetpoint[TASK];
     uint16_t stirringSetpoints[TASK]; 
@@ -41,6 +39,7 @@ class HMI
        //Functions to set up the execution specifications
        //Funciones para configurar las especificaciones de ejecución
         MenuNavigationOptions select_places();
+        bool validate_selected_places_array();
         MenuNavigationOptions set_up_setpoints_and_times();
         MenuNavigationOptions summarize_the_defined_execution_specifications();
        //

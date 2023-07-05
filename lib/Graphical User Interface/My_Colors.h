@@ -12,7 +12,7 @@
 #define MY_GREY        0x7BEF   // GRIS
 #define MY_RED         0x001F   // ROJO 
 #define MY_GREEN       0x07E0   // VERDE 
-#define MY_YELLOW      0x07FF   // AMARILLO  
+#define MY_YELLOW      0x07FF  // AMARILLO  
 #define MY_BLUE        0xF800   // AZUL
 #define MY_MAGENTA     0xF81F   // MAGENTA  
 #define MY_SKYBLUE     0xFFE0   // AZUL CIELO 
