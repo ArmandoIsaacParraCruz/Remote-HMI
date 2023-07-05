@@ -5,7 +5,7 @@
 */
 HMI::HMI()
 {
-    initialize_execution_specifications_struct();
+    
 }
 
 /**This function initializes the executionSpecifications structure with default values
@@ -115,11 +115,61 @@ void HMI::main_menu()
 */
 void HMI::define_execution_specifications()
 {
-    select_places();
+    initialize_execution_specifications_struct();
+    uint8_t current_menu = 0;
+    MenuAction action;
+    while(action != MenuAction::Exit)
+    {
+         switch(current_menu)
+        {
+            case 0:
+                action = select_places();
+                if(action == MenuAction::Forward) {
+                    current_menu++;
+                } else if(action == MenuAction::Backward) {
+                    action = MenuAction::Exit;
+                }
+                break;
 
+            case 1:
+                action = set_up_setpoints_and_times();
+                if(action == MenuAction::Forward) {
+                    current_menu++;
+                } else if(action == MenuAction::Backward) {
+                    current_menu--;
+                }
+                break;
+
+            case 2:
+                action = summarize_the_defined_execution_specifications();
+                if(action == MenuAction::Backward) {
+                    current_menu--;
+                } else if(action == MenuAction::Forward) {
+                    action = MenuAction::Exit;
+                }
+                break;
+        }
+
+    }
 }
 
-void HMI::select_places()
+/**Implement the menu for selecting the places where the specifications will be executed
+ * Returns MenuAction::Forward to continue to the next menu. MenuAction::Backward to backward.
+ * Implementa el menú para seleccionar las plazas en donde se ejecutarán las especificaciones
+ * Devuelve MenuAction::Forward para continuar con el siguiente menú. MenuAction::Backward para retroceder.
+*/
+MenuAction HMI::select_places()
 {
     
+    
+}
+
+MenuAction HMI::set_up_setpoints_and_times()
+{
+    return MenuAction();
+}
+
+MenuAction HMI::summarize_the_defined_execution_specifications()
+{
+return MenuAction();
 }

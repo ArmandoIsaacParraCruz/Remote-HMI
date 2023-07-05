@@ -8,8 +8,9 @@ char Keyboard::get_valid_key(std::vector<char>& validKeys)
         keyPressed = keypad.getKey();
         for(char& validKey: validKeys) {
             if(keyPressed == validKey) {
-                return keyPressed;
+                break;
             }
         }
     }
+    return keyPressed;
 }
