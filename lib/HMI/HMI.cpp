@@ -56,7 +56,7 @@ void HMI::main_menu()
     uint8_t option = 1;
     char keyPressed = NO_KEY;
     bool continue_menu = true;
-    std::vector<char> validKeys = {'C', 'D', 'A'};
+    std::vector<char> validKeys = {'A', 'C', 'D'};
 
     // Display the background elements of the main menu
     gui.show_main_menu_background_elements();
@@ -100,6 +100,7 @@ void HMI::main_menu()
                 option++;
                 break;
         }
+
         // Handle option boundaries
         // Manejar límites de opciones
         if (option > 3) {
@@ -116,36 +117,36 @@ void HMI::main_menu()
 void HMI::define_execution_specifications()
 {
     initialize_execution_specifications_struct();
-    uint8_t current_menu = 0;
-    MenuAction action;
-    while(action != MenuAction::Exit)
+    uint8_t currentMenu = 0;
+    MenuNavigationOptions action;
+    while(action != MenuNavigationOptions::Exit)
     {
-         switch(current_menu)
+         switch(currentMenu)
         {
             case 0:
                 action = select_places();
-                if(action == MenuAction::Forward) {
-                    current_menu++;
-                } else if(action == MenuAction::Backward) {
-                    action = MenuAction::Exit;
+                if(action == MenuNavigationOptions::Forward) {
+                    currentMenu= 1;
+                } else if(action == MenuNavigationOptions::Backward) {
+                    action = MenuNavigationOptions::Exit;
                 }
                 break;
 
             case 1:
                 action = set_up_setpoints_and_times();
-                if(action == MenuAction::Forward) {
-                    current_menu++;
-                } else if(action == MenuAction::Backward) {
-                    current_menu--;
+                if(action == MenuNavigationOptions::Forward) {
+                    currentMenu = 2;
+                } else if(action == MenuNavigationOptions::Backward) {
+                    currentMenu = 0;
                 }
                 break;
 
             case 2:
                 action = summarize_the_defined_execution_specifications();
-                if(action == MenuAction::Backward) {
-                    current_menu--;
-                } else if(action == MenuAction::Forward) {
-                    action = MenuAction::Exit;
+                if(action == MenuNavigationOptions::Backward) {
+                    currentMenu = 1;
+                } else if(action == MenuNavigationOptions::Forward) {
+                    action = MenuNavigationOptions::Exit;
                 }
                 break;
         }
@@ -154,22 +155,30 @@ void HMI::define_execution_specifications()
 }
 
 /**Implement the menu for selecting the places where the specifications will be executed
- * Returns MenuAction::Forward to continue to the next menu. MenuAction::Backward to backward.
+ * Returns MenuNavigationOptions::Forward to continue to the next menu. MenuNavigationOptions::Backward to backward.
  * Implementa el menú para seleccionar las plazas en donde se ejecutarán las especificaciones
- * Devuelve MenuAction::Forward para continuar con el siguiente menú. MenuAction::Backward para retroceder.
+ * Devuelve MenuNavigationOptions::Forward para continuar con el siguiente menú. MenuNavigationOptions::Backward para retroceder.
 */
-MenuAction HMI::select_places()
+MenuNavigationOptions HMI::select_places()
 {
+    uint8_t num_place = 0;
+    char keyPressed = NO_KEY;
+    std::vector<char> validKeys = {'A', 'B', 'C', 'D'};
+    gui.show_select_places_background_elements(executionSpecifications.selectedPlaces, NUMBER_OF_PLACES);
+    while (num_place >= 0 && num_place < NUMBER_OF_PLACES)
+    {
+            gui.highlight_current_place_in_select_places_menu(num_place);
+    }
     
-    
+    return MenuNavigationOptions();
 }
 
-MenuAction HMI::set_up_setpoints_and_times()
+MenuNavigationOptions HMI::set_up_setpoints_and_times()
 {
-    return MenuAction();
+    return MenuNavigationOptions();
 }
 
-MenuAction HMI::summarize_the_defined_execution_specifications()
+MenuNavigationOptions HMI::summarize_the_defined_execution_specifications()
 {
-return MenuAction();
+return MenuNavigationOptions();
 }

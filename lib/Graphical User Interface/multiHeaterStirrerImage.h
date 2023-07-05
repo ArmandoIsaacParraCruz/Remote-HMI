@@ -9,8 +9,8 @@
 #include <pgmspace.h>
 #include <Arduino.h>
 
-const unsigned int ImageWidth = 300;
-const unsigned int imageHight = 82;
+const unsigned int imageWidth = 300;
+const unsigned int imageHeight = 82;
 
 const unsigned short multiHeaterStirrerImage[0x6018] PROGMEM ={
 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,   // 0x0010 (16)

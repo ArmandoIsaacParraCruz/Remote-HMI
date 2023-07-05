@@ -10,7 +10,7 @@
 
 enum TemperatureSensorType{infrared, thermocouples};
 enum TemperatureFunctionType{constant, ramp};
-enum class MenuAction{Forward, Backward, Exit};
+enum class MenuNavigationOptions{Forward, Backward, Exit};
 
 struct TemperatureSetpoint {
             uint16_t temperature;
@@ -40,8 +40,8 @@ class HMI
         void define_execution_specifications();
        //Functions to set up the execution specifications
        //Funciones para configurar las especificaciones de ejecución
-        MenuAction select_places();
-        MenuAction set_up_setpoints_and_times();
-        MenuAction summarize_the_defined_execution_specifications();
+        MenuNavigationOptions select_places();
+        MenuNavigationOptions set_up_setpoints_and_times();
+        MenuNavigationOptions summarize_the_defined_execution_specifications();
        //
 };
