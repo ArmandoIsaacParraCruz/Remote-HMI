@@ -346,7 +346,7 @@ void HMI::set_up_temperature_setpoints(const uint8_t &currentProcess)
 }
 void HMI::set_up_stirrering_setpoints(const uint8_t &currentProcess)
 {
-
+    
     gui.clean_set_up_setpoints_and_times_menu_space();
 }
 void HMI::set_up_process_duration(const uint8_t &currentProcess)

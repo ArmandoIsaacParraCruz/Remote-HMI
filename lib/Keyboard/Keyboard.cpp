@@ -9,6 +9,8 @@ char Keyboard::get_valid_key(std::vector<char>& validKeys)
         for(char& validKey: validKeys) {
             if(keyPressed == validKey) {
                 break;
+            } else {
+                keyPressed ==  NO_KEY;
             }
         }
     }

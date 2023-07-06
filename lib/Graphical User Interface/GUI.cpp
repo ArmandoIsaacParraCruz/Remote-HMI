@@ -192,7 +192,7 @@ void GUI::update_function_temperature_type_current_process(bool tempFunction)
 	lcd.fillRect(0, 200, 320, 40, MY_SKYBLUE);
 	lcd.setFreeFont(TT1);
 	lcd.setTextColor(MY_BLACK);
-	lcd.drawString("A: ELEJIR", 10, 205, FONT2);
+	lcd.drawString("A: SELECCIONAR", 10, 205, FONT2);
 	lcd.drawString("D:", 190, 205, FONT2);
 	lcd.fillTriangle(213, 207, 223, 207, 218, 217, MY_BLACK);
 	lcd.drawString("ESCOJA UNA FUNC. DE TEMPERATURA", 50, 100, FONT2);
