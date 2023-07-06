@@ -227,8 +227,8 @@ void GUI::update_temperatures_setpoints_current_process(const uint16_t &initTemp
 	if(initTemp == 0) {
 		initTempText = "SIN CONFIGURAR";
 	} else {
-		lcd.drawCircle(200, 122, 2, MY_BLACK);
-		lcd.drawString("C", 205, 120, FONT2);
+		lcd.drawCircle(250, 122, 2, MY_BLACK);
+		lcd.drawString("C", 255, 120, FONT2);
 		initTempText = (String)(initTemp);
 	}
 
@@ -236,8 +236,8 @@ void GUI::update_temperatures_setpoints_current_process(const uint16_t &initTemp
 		finalTempText = "SIN CONFIGURAR";
 	} else {
 		finalTempText = (String)(finalTemp);
-		lcd.drawCircle(200, 142, 2, MY_BLACK);
-		lcd.drawString("C", 205, 140, FONT2);
+		lcd.drawCircle(250, 142, 2, MY_BLACK);
+		lcd.drawString("C", 255, 140, FONT2);
 	}
 	lcd.setFreeFont(TT1);
 	lcd.setTextColor(MY_BLACK);
@@ -257,7 +257,7 @@ void GUI::update_stirring_setpoints_current_process(const uint16_t &stirringSetp
 
 	lcd.setFreeFont(TT1);
 	lcd.setTextColor(MY_BLACK);
-	lcd.drawLine(80,160,85,157, MY_BLACK);
+	lcd.drawLine(80,160,83,157, MY_BLACK);
 	lcd.drawString("AGITACION: " + stirringSetpointText, 30, 160, FONT2);
 }
 
@@ -272,7 +272,7 @@ void GUI::update_duration_current_process(const uint32_t &processDuration)
 
 	lcd.setFreeFont(TT1);
 	lcd.setTextColor(MY_BLACK);
-	lcd.drawLine(80,180,85,177, MY_BLACK);
+	lcd.drawLine(80,180,83,177, MY_BLACK);
 	lcd.drawString("DURACION: " + processDurationText, 30, 180, FONT2);
 }
 
@@ -297,6 +297,139 @@ void GUI::show_current_option_set_up_setpoints_and_times_menu(uint8_t &currentOp
 		break;
 
 		case 4:
+			previousPosition = 160;
+			currentPosition = 180;
+		break;
+	}
+
+	lcd.fillRect(10, previousPosition, 20, 20, MY_WHITE);
+	lcd.fillTriangle(10, currentPosition, 10, currentPosition + 10, 20, currentPosition + 5, MY_BLACK);
+}
+
+void GUI::show_set_up_stirring_setpoints_menu_background_elements()
+{
+	lcd.fillRect(10, 100, 300, 100, MY_WHITE);
+	lcd.fillRect(0, 200, 320, 40, MY_SKYBLUE);
+	lcd.setFreeFont(TT1);
+	lcd.setTextColor(MY_BLACK);
+	lcd.drawString("A: LISTO", 10, 205, FONT2);
+	lcd.drawString("B: BORRAR VALOR", 190, 205, FONT2);
+	lcd.drawString("INGRESE UN VALOR ENTRE 0 Y 1200 RPM", 30, 100, FONT2);
+	lcd.drawString("Y LUEGO PRESIONE 'A'", 80, 120, FONT2);
+	lcd.drawLine(122,160,125,157, MY_BLACK);
+	lcd.drawString("AGITACION: ", 70, 160, FONT2);
+}
+
+void GUI::show_rmp_value_set_up_stirring_setpoints_menu(const String &stirringSetpoint)
+{
+	lcd.setFreeFont(TT1);
+	lcd.setTextColor(MY_BLACK);
+	lcd.fillRect(150, 160, 100, 20, MY_WHITE);
+	if(stirringSetpoint.toInt() == 0) {
+		lcd.drawString("SIN CONFIGURAR", 150, 160, FONT2);
+	} else {
+		lcd.drawString(stirringSetpoint + " RPM", 150, 160, FONT2);
+	}
+}
+
+void GUI::show_set_up_constant_temperature_menu_background_elements()
+{
+	lcd.fillRect(10, 100, 300, 100, MY_WHITE);
+	lcd.fillRect(0, 200, 320, 40, MY_SKYBLUE);
+	lcd.setFreeFont(TT1);
+	lcd.setTextColor(MY_BLACK);
+	lcd.drawString("A: LISTO", 10, 205, FONT2);
+	lcd.drawString("B: BORRAR VALOR", 190, 205, FONT2);
+	lcd.drawString("INGRESE UN VALOR QUE NO SUPERE LOS 300", 20, 100, FONT2);
+	lcd.drawString("GRADOS CELSIOUS. LUEGO, PRESIONE 'A'.", 30, 120, FONT2);
+	lcd.drawString("TEMPERATURA:", 50, 160, FONT2);
+}
+
+void GUI::show_temp_value_set_up_constant_temperature_menu(const String &temp)
+{
+	lcd.setFreeFont(TT1);
+	lcd.setTextColor(MY_BLACK);
+	lcd.fillRect(150, 160, 150, 20, MY_WHITE);
+	if(temp.toInt() == 0) {
+		lcd.drawString("SIN CONFIGURAR", 150, 160, FONT2);
+	} else {
+		lcd.drawString(temp + " GRADOS CELSIOUS", 150, 160, FONT2);
+	}
+}
+
+void GUI::show_set_up_process_duration_menu_background_elements()
+{
+	lcd.fillRect(10, 100, 300, 100, MY_WHITE);
+	lcd.fillRect(0, 200, 320, 40, MY_SKYBLUE);
+	lcd.setFreeFont(TT1);
+	lcd.setTextColor(MY_BLACK);
+	lcd.drawString("A: LISTO", 10, 205, FONT2);
+	lcd.drawString("B: BORRAR VALOR", 190, 205, FONT2);
+	lcd.drawString("INGRESE UN VALOR ENTRE 1 Y 180 MINUTOS", 20, 100, FONT2);
+	lcd.drawString("Y LUEGO PRESIONE 'A'", 80, 120, FONT2);
+	lcd.drawLine(120,160,123,157, MY_BLACK);
+	lcd.drawString("DURACION: ", 70, 160, FONT2);
+}
+
+void GUI::show_duration_value_set_up_process_duration_menu(const String &time)
+{
+	lcd.setFreeFont(TT1);
+	lcd.setTextColor(MY_BLACK);
+	lcd.fillRect(150, 160, 100, 20, MY_WHITE);
+	if(time.toInt() == 0) {
+		lcd.drawString("SIN CONFIGURAR", 150, 160, FONT2);
+	} else {
+		lcd.drawString(time + " MINUTOS", 150, 160, FONT2);
+	}
+}
+
+void GUI::show_set_up_ramp_temperature_menu_background_elements()
+{
+	lcd.fillRect(10, 100, 300, 100, MY_WHITE);
+	lcd.fillRect(0, 200, 320, 40, MY_SKYBLUE);
+	lcd.setFreeFont(TT1);
+	lcd.setTextColor(MY_BLACK);
+	lcd.drawString("A: LISTO", 10, 205, FONT2);
+	lcd.drawString("D:", 190, 205, FONT2);
+	lcd.fillTriangle(213, 207, 223, 207, 218, 217, MY_BLACK);
+	lcd.drawString("B: BORRAR VALOR", 10, 225, FONT2);
+	lcd.drawString("INGRESE DOS VALORES QUE NO SUPERE LOS", 20, 100, FONT2);
+	lcd.drawString("300 GRADOS CELSIOUS. LUEGO, PRESIONE 'A'.", 20, 120, FONT2);
+	lcd.drawString("TEMP. INICIAL > TEMP. FINAL", 60, 140, FONT2);
+	lcd.drawString("TEMP. INICIAL: ", 40, 160, FONT2);
+	lcd.drawString("TEMP. FINAL: ", 40, 180, FONT2);
+}
+
+void GUI::show_rmp_value_set_up_ramp_temperature_menu(const String &initTemp, const String &finalTemp)
+{
+	lcd.setFreeFont(TT1);
+	lcd.setTextColor(MY_BLACK);
+	lcd.fillRect(150, 160, 150, 20, MY_WHITE);
+	if(initTemp.toInt() == 0) {
+		lcd.drawString("SIN CONFIGURAR", 150, 160, FONT2);
+	} else {
+		lcd.drawString(initTemp + " GRADOS CELSIOUS", 150, 160, FONT2);
+	}
+
+	lcd.fillRect(150, 180, 150, 20, MY_WHITE);
+	if(finalTemp.toInt() == 0) {
+		lcd.drawString("SIN CONFIGURAR", 150, 180, FONT2);
+	} else {
+		lcd.drawString(finalTemp + " GRADOS CELSIOUS", 150, 180, FONT2);
+	}
+}
+
+void GUI::show_current_option_set_up_ramp_temperature_menu(const uint8_t &currentOption)
+{
+	uint8_t currentPosition, previousPosition;
+	switch (currentOption)
+	{
+		case 1:
+			previousPosition = 180;
+			currentPosition = 160;
+		break;
+
+		case 2:
 			previousPosition = 160;
 			currentPosition = 180;
 		break;

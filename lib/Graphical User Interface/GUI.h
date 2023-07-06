@@ -29,6 +29,15 @@ class GUI
         void update_stirring_setpoints_current_process(const uint16_t &stirringSetpoint);
         void update_duration_current_process(const uint32_t &processDuration);
         void show_current_option_set_up_setpoints_and_times_menu(uint8_t &option);
+        void show_set_up_stirring_setpoints_menu_background_elements();
+        void show_rmp_value_set_up_stirring_setpoints_menu(const String &stirringSetpoint);
+        void show_set_up_constant_temperature_menu_background_elements();
+        void show_temp_value_set_up_constant_temperature_menu(const String &temp);
+        void show_set_up_process_duration_menu_background_elements();
+        void show_duration_value_set_up_process_duration_menu(const String &time);
+        void show_set_up_ramp_temperature_menu_background_elements();
+        void show_rmp_value_set_up_ramp_temperature_menu(const String &initTemp, const String &finalTemp);
+        void show_current_option_set_up_ramp_temperature_menu(const uint8_t &currentOption);
         
     private:
         TFT_eSPI lcd = TFT_eSPI();

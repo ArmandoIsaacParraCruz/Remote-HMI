@@ -5,8 +5,14 @@
 #include "RemoteCommunication.h"
 #include "keyboard.h"
 
-#define NUMBER_OF_PLACES 6
-#define NUMBER_OF_PROCESS 20
+#define NUMBER_OF_PLACES        6
+#define NUMBER_OF_PROCESS       20
+#define MAX_TEMPERATURE         300
+#define MAX_TEMPERATURE_DIGIT   999
+#define MAX_RPM                 1200
+#define MAX_RPM_DIGITS          9999
+#define MAX_TIME                180
+#define MAX_TIME_DIGITS         999        
 
 enum TemperatureFunctionType{constant, ramp};
 enum class MenuNavigationOptions{Forward, Backward, Exit};
@@ -44,10 +50,13 @@ class HMI
         MenuNavigationOptions set_up_processes();
         MenuNavigationOptions set_up_setpoints_and_times(const uint8_t &currentProcess);
         void update_specifications_current_process(const uint8_t &currentProcess);
-        void  set_up_temperatura_function_type(const uint8_t &currentProcess);
-        void  set_up_temperature_setpoints(const uint8_t &currentProcess);
-        void  set_up_stirrering_setpoints(const uint8_t &currentProcess);
-        void  set_up_process_duration(const uint8_t &currentProcess);
+        void set_up_temperatura_function_type(const uint8_t &currentProcess);
+        void set_up_temperature_setpoints(const uint8_t &currentProcess);
+        void set_up_constant_temperature(const uint8_t &currentProcess);
+        void set_up_ramp_temperature(const uint8_t &currentProcess);
+        void set_up_stirring_setpoints(const uint8_t &currentProcess);
+        void set_up_process_duration(const uint8_t &currentProcess);
+        String process_value_string(const String &value, const char keyPressed, const uint16_t maxValue);
         MenuNavigationOptions summarize_the_defined_execution_specifications();
        //
 };

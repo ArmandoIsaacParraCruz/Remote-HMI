@@ -10,6 +10,7 @@ class Keyboard
     public:
         Keyboard() = default;
         char get_valid_key(std::vector<char>& validKeys);
+        char ignore_invalid_keys(std::vector<char> &invalidKeys);
     private:
         byte rowsPins[ROWS] = {4, 13, 14, 27}; 
         byte columnsPins[COLUMNS] = {26, 25, 33, 32}; 

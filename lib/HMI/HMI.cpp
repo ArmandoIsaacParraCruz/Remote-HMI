@@ -55,7 +55,7 @@ void HMI::main_menu()
     char keyPressed = NO_KEY;
     bool continue_menu = true;
     std::vector<char> validKeys = {'A', 'C', 'D'};
-
+     std::vector<char> invalidKeys =  {'1','2','3','4','5','6','B','7','8','9','*','0','#'};
     // Display the background elements of the main menu
     gui.show_main_menu_background_elements();
 
@@ -65,10 +65,7 @@ void HMI::main_menu()
 
         // Wait for a key press
         keyPressed = keyboard.get_valid_key(validKeys);
-
-        Serial.print("Key: ");
         Serial.println(keyPressed);
-
         switch(keyPressed)
         {
             case 'A':
@@ -261,7 +258,7 @@ MenuNavigationOptions HMI::set_up_setpoints_and_times(const uint8_t &currentProc
                     break;
 
                     case 3:
-                        set_up_stirrering_setpoints(currentProcess);
+                        set_up_stirring_setpoints(currentProcess);
                     break;
 
                     case 4:
@@ -341,18 +338,177 @@ void HMI::set_up_temperatura_function_type(const uint8_t &currentProcess)
 }
 void HMI::set_up_temperature_setpoints(const uint8_t &currentProcess)
 {
-    
+    if(processesSpecifications.temperatureSetpoints[currentProcess].tempFunction == constant) {
+        set_up_constant_temperature(currentProcess);
+    } else {
+        set_up_ramp_temperature(currentProcess);
+    }
     gui.clean_set_up_setpoints_and_times_menu_space();
 }
-void HMI::set_up_stirrering_setpoints(const uint8_t &currentProcess)
+
+void HMI::set_up_constant_temperature(const uint8_t &currentProcess)
 {
-    
+    String temperatureSetpoint = "0";
+    char keyPressed = NO_KEY;
+    MenuNavigationOptions menuOption = MenuNavigationOptions::Forward;
+    std::vector<char> invalidKeys = {'*', '#', 'C', 'D'};
+    gui.show_set_up_constant_temperature_menu_background_elements();
+
+    while (menuOption != MenuNavigationOptions::Exit) 
+    {
+        gui.show_temp_value_set_up_constant_temperature_menu(temperatureSetpoint);
+        keyPressed = keyboard.ignore_invalid_keys(invalidKeys);
+        Serial.println(keyPressed);
+        if(isdigit(keyPressed)) {
+            temperatureSetpoint = process_value_string(temperatureSetpoint, keyPressed, MAX_TEMPERATURE_DIGIT);
+        } else {
+            switch (keyPressed)
+            {
+                case 'A':
+                    if(temperatureSetpoint.toInt() <= MAX_TEMPERATURE) {
+                        processesSpecifications.temperatureSetpoints[currentProcess].initialTemperature = (uint16_t)(temperatureSetpoint.toInt());
+                        processesSpecifications.temperatureSetpoints[currentProcess].finalTemperature = (uint16_t)(temperatureSetpoint.toInt());
+                        menuOption = MenuNavigationOptions::Exit;
+                    }
+                break;
+            
+                case 'B':
+                    temperatureSetpoint = "0";
+                break;
+            }
+        }
+       
+    }
+}
+
+void HMI::set_up_ramp_temperature(const uint8_t &currentProcess)
+{
+    String initialTemperature = "0", finalTemperature = "0";
+    char keyPressed = NO_KEY;
+    uint8_t option = 1;
+    MenuNavigationOptions menuOption = MenuNavigationOptions::Forward;
+    std::vector<char> invalidKeys = {'*', '#', 'C'};
+    gui.show_set_up_ramp_temperature_menu_background_elements();
+    while (menuOption != MenuNavigationOptions::Exit) 
+    {
+        gui.show_current_option_set_up_ramp_temperature_menu(option);
+        gui.show_rmp_value_set_up_ramp_temperature_menu(initialTemperature, finalTemperature);
+        keyPressed = keyboard.ignore_invalid_keys(invalidKeys);
+        Serial.println(keyPressed);
+        if(isdigit(keyPressed)) {
+            if(option == 1) {
+                initialTemperature = process_value_string(initialTemperature, keyPressed, MAX_TEMPERATURE_DIGIT);
+            } else {
+                finalTemperature =  process_value_string(finalTemperature, keyPressed, MAX_TEMPERATURE_DIGIT);
+            }
+        } else {
+            switch (keyPressed)
+            {
+                case 'A':
+                    if(initialTemperature.toInt() <= MAX_TEMPERATURE && finalTemperature.toInt() <= MAX_TEMPERATURE && finalTemperature.toInt() > initialTemperature.toInt()) {
+                        processesSpecifications.temperatureSetpoints[currentProcess].initialTemperature = (uint16_t)(initialTemperature.toInt());
+                        processesSpecifications.temperatureSetpoints[currentProcess].finalTemperature = (uint16_t)(finalTemperature.toInt());
+                        menuOption = MenuNavigationOptions::Exit;
+                    }
+                break;
+            
+                case 'B':
+                    if(option == 1) {
+                        initialTemperature = "0";
+                    } else {
+                        finalTemperature = "0";
+                    }
+                break;
+
+                case 'D':
+                    option++;
+                    if(option > 2) {
+                        option = 1;
+                    }
+                break;
+            }
+        }
+    }
+
+}
+
+void HMI::set_up_stirring_setpoints(const uint8_t &currentProcess)
+{
+    String stirringSetpoint = "0";
+    char keyPressed = NO_KEY;
+    MenuNavigationOptions menuOption = MenuNavigationOptions::Forward;
+    std::vector<char> invalidKeys = {'*', '#', 'C', 'D'};
+    gui.show_set_up_stirring_setpoints_menu_background_elements();
+
+    while (menuOption != MenuNavigationOptions::Exit) 
+    {
+        gui.show_rmp_value_set_up_stirring_setpoints_menu(stirringSetpoint);
+        keyPressed = keyboard.ignore_invalid_keys(invalidKeys);
+        Serial.println(keyPressed);
+        if(isdigit(keyPressed)) {
+            stirringSetpoint = process_value_string(stirringSetpoint, keyPressed, MAX_RPM_DIGITS);
+        } else {
+            switch (keyPressed)
+            {
+                case 'A':
+                    if(stirringSetpoint.toInt() <= MAX_RPM) {
+                        processesSpecifications.stirringSetpoints[currentProcess] = (uint16_t)(stirringSetpoint.toInt());
+                        menuOption = MenuNavigationOptions::Exit;
+                    }
+                break;
+            
+                case 'B':
+                    stirringSetpoint = "0";
+                break;
+            }
+        }
+       
+    }
     gui.clean_set_up_setpoints_and_times_menu_space();
 }
 void HMI::set_up_process_duration(const uint8_t &currentProcess)
 {
-
+    String time = "0";
+    char keyPressed = NO_KEY;
+    MenuNavigationOptions menuOption = MenuNavigationOptions::Forward;
+    std::vector<char> invalidKeys = {'*', '#', 'C', 'D'};
+    gui.show_set_up_process_duration_menu_background_elements();
+    while (menuOption != MenuNavigationOptions::Exit) 
+    {
+        gui.show_duration_value_set_up_process_duration_menu(time);
+        keyPressed = keyboard.ignore_invalid_keys(invalidKeys);
+        Serial.println(keyPressed);
+        if(isdigit(keyPressed)) {
+           time = process_value_string(time, keyPressed, MAX_TIME_DIGITS);
+        } else {
+            switch (keyPressed)
+            {
+                case 'A':
+                    if(time.toInt() <= MAX_TIME) {
+                        processesSpecifications.processDuration[currentProcess] = (uint16_t)(time.toInt());
+                        menuOption = MenuNavigationOptions::Exit;
+                    }
+                break;
+            
+                case 'B':
+                    time = "0";
+                break;
+            }
+        }
+       
+    }
     gui.clean_set_up_setpoints_and_times_menu_space();
+}
+
+String HMI::process_value_string(const String &value, const char keyPressed, const uint16_t maxValue)
+{
+    String valueToReturn = value;
+    if(value == "0" || (value + keyPressed).toInt() > maxValue) {
+        valueToReturn = keyPressed;
+        } else {
+        valueToReturn += keyPressed;
+    }
+    return valueToReturn;
 }
 
 MenuNavigationOptions HMI::summarize_the_defined_execution_specifications()
