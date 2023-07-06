@@ -3,18 +3,18 @@
 char Keyboard::get_valid_key(std::vector<char>& validKeys)
 {
     char keyPressed = NO_KEY;
-    bool valid = true;
+    bool invalid = true;
     // Wait for a key press
     while (keyPressed == NO_KEY) {
         keyPressed = keypad.getKey();
         for(char& validKey: validKeys) {
-            valid = valid && (keyPressed == validKey);
+            invalid = invalid && (keyPressed != validKey);
         }
 
-        if(valid) {
-            break;
-        } else {
+        if(invalid) {
             keyPressed == NO_KEY;
+        } else {
+            break;
         }
     }
     return keyPressed;
