@@ -38,7 +38,7 @@ class GUI
         void show_set_up_ramp_temperature_menu_background_elements();
         void show_rmp_value_set_up_ramp_temperature_menu(const String &initTemp, const String &finalTemp);
         void show_current_option_set_up_ramp_temperature_menu(const uint8_t &currentOption);
-        
+        void show_the_error_in_specifications_current_process(const bool &stirringAndTemp, const bool &duration);
     private:
         TFT_eSPI lcd = TFT_eSPI();
         void show_selected_places(const bool selectedPlaces[], const uint8_t numPlaces);

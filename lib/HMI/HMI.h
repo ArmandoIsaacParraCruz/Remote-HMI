@@ -57,6 +57,9 @@ class HMI
         void set_up_stirring_setpoints(const uint8_t &currentProcess);
         void set_up_process_duration(const uint8_t &currentProcess);
         String process_value_string(const String &value, const char keyPressed, const uint16_t maxValue);
+        bool verify_specifications_current_process(const uint8_t &currentProcess);
+        void error_in_specifications_current_process(const bool &stirringAndTemp, const bool &duration);
+        bool add_or_summarize_processes();
         MenuNavigationOptions summarize_the_defined_execution_specifications();
        //
 };

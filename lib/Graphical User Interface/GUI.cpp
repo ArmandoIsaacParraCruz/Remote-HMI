@@ -438,3 +438,21 @@ void GUI::show_current_option_set_up_ramp_temperature_menu(const uint8_t &curren
 	lcd.fillRect(10, previousPosition, 20, 20, MY_WHITE);
 	lcd.fillTriangle(10, currentPosition, 10, currentPosition + 10, 20, currentPosition + 5, MY_BLACK);
 }
+
+void GUI::show_the_error_in_specifications_current_process(const bool &stirringAndTemp, const bool &duration)
+{
+	lcd.fillRect(10, 100, 300, 100, MY_WHITE);
+	lcd.fillRect(0, 200, 320, 40, MY_SKYBLUE);
+	lcd.setFreeFont(TT1);
+	lcd.setTextColor(MY_BLACK);
+	lcd.drawString("A: ENTENDIDO", 10, 205, FONT2);
+	lcd.drawString("PARA CONTINUAR AL MENOS CONFIGURE:", 30, 100, FONT2);
+	if(!stirringAndTemp) {
+		lcd.drawLine(250,130,253,127, MY_BLACK);
+		lcd.drawString("-LA TEMPERATURA O LA AGITACION", 40, 130, FONT2);
+	}
+	if(!duration) {
+		lcd.drawLine(220,150,223,147, MY_BLACK);
+		lcd.drawString("-EL TIEMPO DE DURACION", 70, 150, FONT2);
+	}
+}

@@ -160,7 +160,7 @@ MenuNavigationOptions HMI::select_places()
     char keyPressed = NO_KEY;
     std::vector<char> validKeys = {'A', 'B', 'C', 'D'};
     gui.show_select_places_menu_background_elements(processesSpecifications.selectedPlaces, NUMBER_OF_PLACES);
-    while (currentPlace >= 0 && currentPlace < NUMBER_OF_PLACES)
+    while (true)
     {
         gui.highlight_current_place_in_select_places_menu(processesSpecifications.selectedPlaces, currentPlace, NUMBER_OF_PLACES);
         keyPressed = keyboard.get_valid_key(validKeys);
@@ -192,8 +192,6 @@ MenuNavigationOptions HMI::select_places()
             break;
         }
     }
-    
-    return MenuNavigationOptions::Exit;
 }
 
 bool HMI::validate_selected_places_array()
@@ -214,22 +212,32 @@ MenuNavigationOptions HMI::set_up_processes()
 {
     uint8_t currentProcess = 0;
     MenuNavigationOptions menuOption = MenuNavigationOptions::Forward;
-    while (menuOption != MenuNavigationOptions::Exit)
+    while (true)
     {
         menuOption = set_up_setpoints_and_times(currentProcess);
-        if(menuOption == MenuNavigationOptions::Forward) {
-            ++currentProcess;
-        } else if(menuOption == MenuNavigationOptions::Backward) {
-            if(currentProcess == 0) {
-                return MenuNavigationOptions::Backward;
-            } else {
-             --currentProcess;
-            }
-            
+
+        switch (menuOption)
+        {
+            case MenuNavigationOptions::Forward:
+                ++currentProcess;
+                if(currentProcess > 20) {
+                    return MenuNavigationOptions::Forward;
+                }
+            break;
+
+            case MenuNavigationOptions::Backward:
+                if(currentProcess <= 0) {
+                    return MenuNavigationOptions::Backward;
+                } else {
+                    --currentProcess;
+                }  
+            break;
+
+            case MenuNavigationOptions::Exit:
+                return MenuNavigationOptions::Forward;
+            break;
         }
     }
-    
-    return MenuNavigationOptions::Exit;
 }
 
 MenuNavigationOptions HMI::set_up_setpoints_and_times(const uint8_t &currentProcess)
@@ -272,7 +280,9 @@ MenuNavigationOptions HMI::set_up_setpoints_and_times(const uint8_t &currentProc
             break;
 
             case 'C':
-                
+                if(verify_specifications_current_process(currentProcess)) {
+                    
+                }
             break;
 
             case 'D':
@@ -283,10 +293,7 @@ MenuNavigationOptions HMI::set_up_setpoints_and_times(const uint8_t &currentProc
                
             break;
         }
-
-        
     }
-    return MenuNavigationOptions();
 }
 
 void HMI::update_specifications_current_process(const uint8_t &currentProcess)
@@ -334,7 +341,7 @@ void HMI::set_up_temperatura_function_type(const uint8_t &currentProcess)
             break;
         }
     }
-     gui.clean_set_up_setpoints_and_times_menu_space();
+    gui.clean_set_up_setpoints_and_times_menu_space();
 }
 void HMI::set_up_temperature_setpoints(const uint8_t &currentProcess)
 {
@@ -466,6 +473,8 @@ void HMI::set_up_stirring_setpoints(const uint8_t &currentProcess)
     }
     gui.clean_set_up_setpoints_and_times_menu_space();
 }
+
+
 void HMI::set_up_process_duration(const uint8_t &currentProcess)
 {
     String time = "0";
@@ -509,6 +518,38 @@ String HMI::process_value_string(const String &value, const char keyPressed, con
         valueToReturn += keyPressed;
     }
     return valueToReturn;
+}
+
+bool HMI::verify_specifications_current_process(const uint8_t &currentProcess)
+{
+    bool stirringAndTempVerified = true, durationVerified = true;
+    if(processesSpecifications.stirringSetpoints[currentProcess] == 0 && processesSpecifications.temperatureSetpoints[currentProcess].initialTemperature == 0) {
+        stirringAndTempVerified = false;
+    }
+
+    if(processesSpecifications.processDuration[currentProcess] == 0) {
+        durationVerified = false;
+    }
+
+    if(!(stirringAndTempVerified && durationVerified)) {
+        error_in_specifications_current_process(stirringAndTempVerified, durationVerified);
+    }
+
+    return stirringAndTempVerified && durationVerified;
+}
+
+void HMI::error_in_specifications_current_process(const bool &stirringAndTemp, const bool &duration)
+{
+    char keyPressed = NO_KEY;
+    std::vector<char> validKey = {'A'};
+    gui.show_the_error_in_specifications_current_process(stirringAndTemp, duration);
+    keyboard.get_valid_key(validKey);
+    gui.clean_set_up_setpoints_and_times_menu_space();
+}
+
+bool HMI::add_or_summarize_processes()
+{
+    return false;
 }
 
 MenuNavigationOptions HMI::summarize_the_defined_execution_specifications()
