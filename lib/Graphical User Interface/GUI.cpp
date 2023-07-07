@@ -490,6 +490,8 @@ void GUI::show_summarize_the_defined_execution_specifications_background_element
 {
 	lcd.fillScreen(MY_SKYBLUE);
 	show_selected_places(selectedPlaces, numPlaces);
+	lcd.setFreeFont(TT1);
+	lcd.setTextColor(MY_BLACK);
 	lcd.fillRect(10, 100, 300, 100, MY_WHITE);
 	lcd.fillRect(65, 80, 170, 20, MY_WHITE);
 	lcd.drawString("B: REGRESAR", 10, 205, FONT2);
@@ -503,4 +505,36 @@ void GUI::update_number_of_current_process(const uint8_t &currentProcess, const 
 	lcd.setFreeFont(TT1);
 	lcd.setTextColor(MY_BLACK);
 	lcd.drawString("PROCESO: " + (String)(currentProcess + 1) + " DE " + (String)(configuratedProcesses + 1), 70, 80, FONT2);
+}
+
+void GUI::show_confirm_and_transmit_configurated_processes_background_elements()
+{
+	lcd.fillScreen(MY_SKYBLUE);
+	lcd.fillRect(10, 10, 300, 220, MY_WHITE);
+	lcd.drawString("PARA CONFIRMAR Y TRANSMITIR LOS", 50, 40, FONT2);
+	lcd.drawString("PROCESOS CONFIGURADOS A LA ", 60, 60, FONT2);
+	lcd.drawString("MULTIPARRILLA: PRESIONE 'C'", 65, 80, FONT2);
+	lcd.drawString("PARA REGRESAR PRESIONE B", 70, 130, FONT2);
+	lcd.drawString("B: REGRESAR", 20, 205, FONT2);
+	lcd.drawString("C: CONFIRMAR Y TRANSMITIR", 120, 205, FONT2);
+}
+
+void GUI::transmission_failed()
+{
+	lcd.fillRect(10, 10, 300, 180, MY_WHITE);
+	lcd.drawString("HUBO UN ERROR PARA COMUNICARSE CON", 30, 20, FONT2);
+	lcd.drawString("LA MULTIPARRILLA. VERIFIQUE QUE", 45, 40, FONT2);
+	lcd.drawString("LA MULTIPARRILLA SE ENCUENTRE ENCENDIDA", 15, 60, FONT2);
+	lcd.drawString("PRESIONE 'C' PARA REINTENTAR", 60, 150, FONT2);
+}
+
+void GUI::transmission_succed()
+{
+	lcd.fillScreen(MY_SKYBLUE);
+	lcd.fillRect(10, 10, 300, 220, MY_GREEN);
+	lcd.setFreeFont(FMB9);
+    lcd.setTextColor(MY_BLACK);
+	lcd.drawString("SE ENVIARON LOS PROCESOS", 20, 40);
+	lcd.drawString("CONFIGURADOS CORRECTAMENTE", 20, 70);
+	lcd.drawString("PRESIONE 'A' PARA SALIR", 30, 100);
 }

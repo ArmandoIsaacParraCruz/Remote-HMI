@@ -32,6 +32,11 @@ bool RemoteCommunication::testConnection()
     return connected;
 }
 
+bool RemoteCommunication::sendProcessesConfigurated()
+{
+    return false;
+}
+
 /**This function allows implement a non-blocking delay
  * Esta función permite implementar un retardo sin bloqueo
 */

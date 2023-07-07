@@ -144,7 +144,7 @@ void HMI::define_execution_specifications()
             break;
 
             case 3:
-                menuOption = confirmAndTransmitConfiguratedProcesses();
+                menuOption = confirm_and_transmit_configurated_processes();
                  if(menuOption == MenuNavigationOptions::Backward) {
                     currentMenu = 2;
                 } else {
@@ -633,7 +633,27 @@ MenuNavigationOptions HMI::summarize_the_defined_execution_specifications()
     }
 }
 
-MenuNavigationOptions HMI::confirmAndTransmitConfiguratedProcesses()
+MenuNavigationOptions HMI::confirm_and_transmit_configurated_processes()
 {
-    return MenuNavigationOptions();
+    char keyPressed = NO_KEY;
+    std::vector<char> validKeys = {'B', 'C'};
+    gui.show_confirm_and_transmit_configurated_processes_background_elements();
+    while (true)
+    {
+        keyPressed = keyboard.get_valid_key(validKeys);
+
+        if(keyPressed == 'B') {
+            return MenuNavigationOptions::Backward;
+        } else if(keyPressed == 'C') {
+            if(remoteCommunication.sendProcessesConfigurated()) {
+                break;
+            } else {
+                gui.transmission_failed();
+            }
+        }
+    }
+    gui.transmission_succed();
+    validKeys = {'A'};
+    keyboard.get_valid_key(validKeys);
+    return MenuNavigationOptions::Exit;
 }

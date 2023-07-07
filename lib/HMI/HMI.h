@@ -5,31 +5,33 @@
 #include "RemoteCommunication.h"
 #include "keyboard.h"
 
-#define NUMBER_OF_PLACES        6
-#define NUMBER_OF_PROCESS       20
-#define MAX_TEMPERATURE         300
-#define MAX_TEMPERATURE_DIGIT   999
-#define MAX_RPM                 1200
-#define MAX_RPM_DIGITS          9999
-#define MAX_TIME                180
-#define MAX_TIME_DIGITS         999        
+/*
+NUMBER_OF_PLACES = 6
+NUMBER_OF_PROCESS = 20
+MAX_TEMPERATURE = 300
+MAX_TEMPERATURE_DIGIT = 999
+MAX_RPM = 1200
+MAX_RPM_DIGITS = 9999
+MAX_TIME = 180
+MAX_TIME_DIGITS = 999  
+*/      
 
-enum TemperatureFunctionType{constant, ramp};
-enum class MenuNavigationOptions{Forward, Backward, Exit, Continue};
-
+/*enum TemperatureFunctionType{constant, ramp};
 struct TemperatureSetpoint {
             uint16_t initialTemperature;
             uint16_t finalTemperature;
             TemperatureFunctionType tempFunction;
 };
 
-struct ProcessesSpecifications{
+struct ProcessesSpecificationsMessage{
     bool selectedPlaces[NUMBER_OF_PLACES];
     TemperatureSetpoint temperatureSetpoints[NUMBER_OF_PROCESS];
     uint16_t stirringSetpoints[NUMBER_OF_PROCESS]; 
     uint32_t processDuration[NUMBER_OF_PROCESS];
     uint8_t configuredProcesses;
-};
+};*/
+
+enum class MenuNavigationOptions{Forward, Backward, Exit, Continue};
 
 class HMI
 {
@@ -37,10 +39,11 @@ class HMI
         HMI();  
         void HMI_main_loop();
     private:
-        ProcessesSpecifications processesSpecifications;
+        ProcessesSpecificationsMessage processesSpecifications;
         void initialize_processes_specifications_struct();
         GUI gui{};
         Keyboard keyboard{};
+        RemoteCommunication remoteCommunication{};
         void main_menu();
         void define_execution_specifications();
        //Functions to set up the execution specifications
@@ -62,6 +65,6 @@ class HMI
         void error_in_specifications_current_process(const bool &stirringAndTemp, const bool &duration);
         MenuNavigationOptions add_or_summarize_processes();
         MenuNavigationOptions summarize_the_defined_execution_specifications();
-        MenuNavigationOptions confirmAndTransmitConfiguratedProcesses();
+        MenuNavigationOptions confirm_and_transmit_configurated_processes();
        //
 };

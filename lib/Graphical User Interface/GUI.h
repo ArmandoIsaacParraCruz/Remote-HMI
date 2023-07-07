@@ -43,6 +43,9 @@ class GUI
         void ask_add_or_summarize_processes();
         void show_summarize_the_defined_execution_specifications_background_elements(const bool selectedPlaces[], const uint8_t numPlaces);
         void update_number_of_current_process(const uint8_t &currentProcess, const uint8_t &configuratedProcesses);
+        void show_confirm_and_transmit_configurated_processes_background_elements();
+        void transmission_failed();
+        void transmission_succed();
     private:
         TFT_eSPI lcd = TFT_eSPI();
         void show_selected_places(const bool selectedPlaces[], const uint8_t numPlaces);
