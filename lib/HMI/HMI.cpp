@@ -31,7 +31,7 @@ void HMI::initialize_processes_specifications_struct()
 
     // Set the configured task to zero
     // Asigna cero a las tareas configuradas
-    processesSpecifications.configuredTask = 0;
+    processesSpecifications.configuredProcesses = 0;
 }
 
 /**This is the main loop program in the project
@@ -122,9 +122,7 @@ void HMI::define_execution_specifications()
                 menuOption = select_places();
                 if(menuOption == MenuNavigationOptions::Forward) {
                     currentMenu= 1;
-                } else {
-                    menuOption = MenuNavigationOptions::Exit;
-                }
+                } 
             break;
 
             case 1:
@@ -138,12 +136,20 @@ void HMI::define_execution_specifications()
 
             case 2:
                 menuOption = summarize_the_defined_execution_specifications();
-                if(menuOption == MenuNavigationOptions::Backward) {
+                if(menuOption == MenuNavigationOptions::Forward) {
+                    currentMenu = 3;
+                } else if(menuOption == MenuNavigationOptions::Backward) {
                     currentMenu = 1;
+                }
+            break;
+
+            case 3:
+                menuOption = confirmAndTransmitConfiguratedProcesses();
+                 if(menuOption == MenuNavigationOptions::Backward) {
+                    currentMenu = 2;
                 } else {
                     menuOption = MenuNavigationOptions::Exit;
                 }
-            break;
         }
 
     }
@@ -176,7 +182,7 @@ MenuNavigationOptions HMI::select_places()
             break;
             
             case 'B' :
-                return MenuNavigationOptions::Exit;
+                return confirm_exit_select_places();
             break;
 
             case 'C':
@@ -192,6 +198,25 @@ MenuNavigationOptions HMI::select_places()
             break;
         }
     }
+}
+
+MenuNavigationOptions HMI::confirm_exit_select_places()
+{
+    MenuNavigationOptions menuOption;
+    char keyPressed = NO_KEY;
+    std::vector<char> validKeys = {'B', 'C'};
+    gui.ask_to_exit_select_places();
+    keyPressed = keyboard.get_valid_key(validKeys);
+    switch (keyPressed)
+    {
+        case 'B':
+            menuOption = MenuNavigationOptions::Exit;
+        break;
+        case 'C':
+            menuOption = MenuNavigationOptions::Continue;
+        break;
+    }
+    return menuOption;
 }
 
 bool HMI::validate_selected_places_array()
@@ -219,6 +244,9 @@ MenuNavigationOptions HMI::set_up_processes()
         switch (menuOption)
         {
             case MenuNavigationOptions::Forward:
+                if(processesSpecifications.configuredProcesses == currentProcess) {
+                    ++processesSpecifications.configuredProcesses;
+                }
                 ++currentProcess;
                 if(currentProcess > 20) {
                     return MenuNavigationOptions::Forward;
@@ -247,7 +275,7 @@ MenuNavigationOptions HMI::set_up_setpoints_and_times(const uint8_t &currentProc
     MenuNavigationOptions menuOption = MenuNavigationOptions::Forward;
     std::vector<char> validKeys = {'A', 'B', 'C', 'D'};
     gui.show_set_up_setpoints_and_times_menu_background_elements(processesSpecifications.selectedPlaces, NUMBER_OF_PLACES, currentProcess);
-    while(menuOption != MenuNavigationOptions::Exit)
+    while(true)
     {
         update_specifications_current_process(currentProcess);
         gui.show_current_option_set_up_setpoints_and_times_menu(option);
@@ -281,7 +309,11 @@ MenuNavigationOptions HMI::set_up_setpoints_and_times(const uint8_t &currentProc
 
             case 'C':
                 if(verify_specifications_current_process(currentProcess)) {
-                    
+                    if(currentProcess == processesSpecifications.configuredProcesses) {
+                        return add_or_summarize_processes();
+                    } else {
+                        return MenuNavigationOptions::Forward;
+                    }
                 }
             break;
 
@@ -547,12 +579,61 @@ void HMI::error_in_specifications_current_process(const bool &stirringAndTemp, c
     gui.clean_set_up_setpoints_and_times_menu_space();
 }
 
-bool HMI::add_or_summarize_processes()
+MenuNavigationOptions HMI::add_or_summarize_processes()
 {
-    return false;
+    char keyPressed = NO_KEY;
+    std::vector<char> validKeys = {'A', 'B', 'C'};
+    gui.ask_add_or_summarize_processes();
+    keyPressed = keyboard.get_valid_key(validKeys);
+    switch (keyPressed)
+    {
+        case 'A':
+            return MenuNavigationOptions::Forward;
+        break;
+        case 'B':
+            return MenuNavigationOptions::Continue;
+        break;
+        case 'C':
+            return MenuNavigationOptions::Exit;
+        break;
+    
+    }
+    return MenuNavigationOptions::Exit;
 }
 
 MenuNavigationOptions HMI::summarize_the_defined_execution_specifications()
 {
-return MenuNavigationOptions();
+    char keyPressed = NO_KEY;
+    uint8_t currentProcess = 0;
+    std::vector<char> validKeys = {'B', 'C'};
+    gui.show_summarize_the_defined_execution_specifications_background_elements(processesSpecifications.selectedPlaces, NUMBER_OF_PLACES);
+    while(true)
+    {
+        gui.update_number_of_current_process(currentProcess, processesSpecifications.configuredProcesses);
+        update_specifications_current_process(currentProcess);
+        keyPressed = keyboard.get_valid_key(validKeys);
+        switch (keyPressed)
+        {
+            case 'B':
+                if(currentProcess > 0) {
+                    --currentProcess;
+                } else {
+                    return MenuNavigationOptions::Backward;
+                }
+            break;
+            
+            case 'C':
+                if(currentProcess >= processesSpecifications.configuredProcesses) {
+                    return MenuNavigationOptions::Forward;
+                } else {
+                    ++currentProcess;
+                }
+            break;
+        }
+    }
+}
+
+MenuNavigationOptions HMI::confirmAndTransmitConfiguratedProcesses()
+{
+    return MenuNavigationOptions();
 }

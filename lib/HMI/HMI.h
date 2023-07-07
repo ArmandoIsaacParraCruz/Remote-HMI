@@ -15,7 +15,7 @@
 #define MAX_TIME_DIGITS         999        
 
 enum TemperatureFunctionType{constant, ramp};
-enum class MenuNavigationOptions{Forward, Backward, Exit};
+enum class MenuNavigationOptions{Forward, Backward, Exit, Continue};
 
 struct TemperatureSetpoint {
             uint16_t initialTemperature;
@@ -28,7 +28,7 @@ struct ProcessesSpecifications{
     TemperatureSetpoint temperatureSetpoints[NUMBER_OF_PROCESS];
     uint16_t stirringSetpoints[NUMBER_OF_PROCESS]; 
     uint32_t processDuration[NUMBER_OF_PROCESS];
-    uint8_t configuredTask;
+    uint8_t configuredProcesses;
 };
 
 class HMI
@@ -46,6 +46,7 @@ class HMI
        //Functions to set up the execution specifications
        //Funciones para configurar las especificaciones de ejecución
         MenuNavigationOptions select_places();
+        MenuNavigationOptions confirm_exit_select_places();
         bool validate_selected_places_array();
         MenuNavigationOptions set_up_processes();
         MenuNavigationOptions set_up_setpoints_and_times(const uint8_t &currentProcess);
@@ -59,7 +60,8 @@ class HMI
         String process_value_string(const String &value, const char keyPressed, const uint16_t maxValue);
         bool verify_specifications_current_process(const uint8_t &currentProcess);
         void error_in_specifications_current_process(const bool &stirringAndTemp, const bool &duration);
-        bool add_or_summarize_processes();
+        MenuNavigationOptions add_or_summarize_processes();
         MenuNavigationOptions summarize_the_defined_execution_specifications();
+        MenuNavigationOptions confirmAndTransmitConfiguratedProcesses();
        //
 };

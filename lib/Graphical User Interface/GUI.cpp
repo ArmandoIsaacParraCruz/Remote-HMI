@@ -148,6 +148,21 @@ void GUI::highlight_current_place_in_select_places_menu(const bool selectedPlace
 	lcd.drawString(textOption, 180, 170, FONT2);
 }
 
+void GUI::ask_to_exit_select_places()
+{
+	lcd.fillRect(10, 85, 300, 115, MY_WHITE);
+	lcd.fillRect(0, 200, 320, 40, MY_SKYBLUE);
+	lcd.setFreeFont(TT1);
+	lcd.setTextColor(MY_BLACK);
+	lcd.drawString("B: SALIR", 10, 205, FONT2);
+	lcd.drawString("C: CONTINUAR", 190, 205, FONT2);
+	lcd.drawLine(270,95,273,93, MY_BLACK);
+	lcd.drawString("ADVERTENCIA: AL SALIR SE PERDERA", 40, 95, FONT2);
+	lcd.drawString("LO CONFIGURADO", 110, 115, FONT2);
+	lcd.drawString("-SALIR : PRESIONE 'B'", 20, 150, FONT2);
+	lcd.drawString("-PERMANECER: PRESIONE 'C'", 20, 180, FONT2);
+}
+
 void GUI::show_set_up_setpoints_and_times_menu_background_elements(const bool selectedPlaces[], const uint8_t numPlaces, const uint8_t &currentProcess)
 {
 	lcd.fillScreen(MY_SKYBLUE);
@@ -455,4 +470,37 @@ void GUI::show_the_error_in_specifications_current_process(const bool &stirringA
 		lcd.drawLine(220,150,223,147, MY_BLACK);
 		lcd.drawString("-EL TIEMPO DE DURACION", 70, 150, FONT2);
 	}
+}
+
+void GUI::ask_add_or_summarize_processes()
+{
+	lcd.fillRect(10, 100, 300, 100, MY_WHITE);
+	lcd.fillRect(0, 200, 320, 40, MY_SKYBLUE);
+	lcd.setFreeFont(TT1);
+	lcd.setTextColor(MY_BLACK);
+	lcd.drawString("A: AGREGAR PROCESO", 10, 205, FONT2);
+	lcd.drawString("B: REGRESAR", 10, 220, FONT2);
+	lcd.drawString("C: CONTINUAR", 190, 205, FONT2);
+	lcd.drawString("-AGREGAR UN PROCESO: PRESIONE 'A'", 20, 100, FONT2);
+	lcd.drawString("-CONTINUAR PARA CONFIRMAR LO", 20, 140, FONT2);
+	lcd.drawString(" CONFIGURADO: PRESIONE 'C'", 20, 160, FONT2);
+}
+
+void GUI::show_summarize_the_defined_execution_specifications_background_elements(const bool selectedPlaces[], const uint8_t numPlaces)
+{
+	lcd.fillScreen(MY_SKYBLUE);
+	show_selected_places(selectedPlaces, numPlaces);
+	lcd.fillRect(10, 100, 300, 100, MY_WHITE);
+	lcd.fillRect(65, 80, 170, 20, MY_WHITE);
+	lcd.drawString("B: REGRESAR", 10, 205, FONT2);
+	lcd.drawString("C: SIGUIENTE", 190, 205, FONT2);
+}	
+
+void GUI::update_number_of_current_process(const uint8_t &currentProcess, const uint8_t &configuratedProcesses)
+{
+	lcd.fillRect(10, 100, 300, 100, MY_WHITE);
+	lcd.fillRect(65, 80, 170, 20, MY_WHITE);
+	lcd.setFreeFont(TT1);
+	lcd.setTextColor(MY_BLACK);
+	lcd.drawString("PROCESO: " + (String)(currentProcess + 1) + " DE " + (String)(configuratedProcesses + 1), 70, 80, FONT2);
 }
