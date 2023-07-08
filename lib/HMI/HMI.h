@@ -1,7 +1,7 @@
 #pragma once
 #include <Arduino.h>
 #include <vector>
-#include "GUI.h"
+#include "GraphicalUserInterface.h"
 #include "RemoteCommunication.h"
 #include "keyboard.h"
 
@@ -37,34 +37,33 @@ class HMI
 {
     public:
         HMI();  
-        void HMI_main_loop();
+        void runHMIMainLoop();
     private:
         ProcessesSpecificationsMessage processesSpecifications;
-        void initialize_processes_specifications_struct();
-        GUI gui{};
+        void initializeProcessesSpecificationsStruct();
+        
         Keyboard keyboard{};
         RemoteCommunication remoteCommunication{};
-        void main_menu();
-        void define_execution_specifications();
+        void mainMenu();
+        void defineExecutionSpecifications();
        //Functions to set up the execution specifications
        //Funciones para configurar las especificaciones de ejecución
-        MenuNavigationOptions select_places();
-        MenuNavigationOptions confirm_exit_select_places();
-        bool validate_selected_places_array();
-        MenuNavigationOptions set_up_processes();
-        MenuNavigationOptions set_up_setpoints_and_times(const uint8_t &currentProcess);
-        void update_specifications_current_process(const uint8_t &currentProcess);
-        void set_up_temperatura_function_type(const uint8_t &currentProcess);
-        void set_up_temperature_setpoints(const uint8_t &currentProcess);
-        void set_up_constant_temperature(const uint8_t &currentProcess);
-        void set_up_ramp_temperature(const uint8_t &currentProcess);
-        void set_up_stirring_setpoints(const uint8_t &currentProcess);
-        void set_up_process_duration(const uint8_t &currentProcess);
-        String process_value_string(const String &value, const char keyPressed, const uint16_t maxValue);
-        bool verify_specifications_current_process(const uint8_t &currentProcess);
-        void error_in_specifications_current_process(const bool &stirringAndTemp, const bool &duration);
-        MenuNavigationOptions add_or_summarize_processes();
-        MenuNavigationOptions summarize_the_defined_execution_specifications();
-        MenuNavigationOptions confirm_and_transmit_configurated_processes();
-       //
+        MenuNavigationOptions selectPlacesMenu();
+        MenuNavigationOptions confirmExitSelectPlaces();
+        bool validateSelectedPlacesArray();
+        MenuNavigationOptions setUpProcessesMenus();
+        MenuNavigationOptions setUpSetpointsAndTimesMenu(const uint8_t &currentProcess);
+        void updateSpecificationsCurrentProcess(const uint8_t &currentProcess);
+        void setUpTemperatureFunctionTypeMenu(const uint8_t &currentProcess);
+        void setUpTemperatureSetpointsMenus(const uint8_t &currentProcess);
+        void setUpConstantTemperatureMenu(const uint8_t &currentProcess);
+        void setUpRampTemperatureMenu(const uint8_t &currentProcess);
+        void setUpStirringSetpointsMenu(const uint8_t &currentProcess);
+        void setUpProcessDurationMenu(const uint8_t &currentProcess);
+        String processValueString(const String &value, const char keyPressed, const uint16_t maxValue);
+        bool verifySpecificationsCurrentProcess(const uint8_t &currentProcess);
+        void handleSpecificationErrors(const bool &stirringAndTemp, const bool &duration);
+        MenuNavigationOptions addOrSummarizeProcessesMenu();
+        MenuNavigationOptions summarizeDefinedExecutionSpecificationsMenu();
+        MenuNavigationOptions confirmAndTransmitConfiguredProcessesMenu();
 };

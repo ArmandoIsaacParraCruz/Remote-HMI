@@ -8,6 +8,6 @@ void setup() {
 }
 
 void loop() {
-  hmi.HMI_main_loop();
+  hmi.runHMIMainLoop();
 }
 

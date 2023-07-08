@@ -1,18 +1,17 @@
-#include "GUI.h"
+#include "GraphicalUserInterface.h"
 
-GUI::GUI()
+TFT_eSPI GraphicalUserInterface::lcd{};
+
+void GraphicalUserInterface::beginGraphicalUserInterface()
 {
-    lcd.begin(2);
+	lcd.begin(2);
     lcd.invertDisplay(false);
     lcd.setRotation(1);
     lcd.fillScreen(MY_WHITE);
-    lcd.setSwapBytes(true);   
+    lcd.setSwapBytes(true);  
 }
 
-/**Shows the UAM logo and the letter "LCAR" on the tft screen 
- * Muestra el logo de la UAM y las letras "LCAR" en la patanlla tft
-*/
-void GUI::show_UAM_logo()
+void GraphicalUserInterface::displayUamLogo()
 {
     int32_t logoX = 65,logoY = 10,txtX = 120, txtY = 200;
 	lcd.pushImage(logoX, logoY, logoWidth, logoHeight, logoUAM);
@@ -23,7 +22,7 @@ void GUI::show_UAM_logo()
 	lcd.fillScreen(TFT_SKYBLUE);
 }
 
-void GUI::show_main_menu_background_elements()
+void GraphicalUserInterface::displayMainMenuBackgroundElements()
 {
     lcd.fillScreen(MY_SKYBLUE);
     lcd.fillRect(45, 10, 240, 60, MY_BLACK);
@@ -39,7 +38,7 @@ void GUI::show_main_menu_background_elements()
     lcd.drawString("A:ELEGIR", 215, 218);
 }
 
-void GUI::highlight_current_option_in_main_menu(const uint8_t &option)
+void GraphicalUserInterface::highlightCurrentOptionInMainMenu(const uint8_t &option)
 {
     uint32_t posX = 50,posY = 15, width = 230, height = 50, spacing = 0, color;
 
@@ -64,10 +63,10 @@ void GUI::highlight_current_option_in_main_menu(const uint8_t &option)
 	lcd.drawString("Y SALIDA DE DATOS",70, 180);
 }
 
-void GUI::show_select_places_menu_background_elements(const bool selectedPlaces[], const uint8_t numPlaces)
+void GraphicalUserInterface::displaySelectPlacesMenuBackgroundElements(const bool selectedPlaces[], const uint8_t numPlaces)
 {
 	lcd.fillScreen(MY_SKYBLUE);
-	show_selected_places(selectedPlaces, numPlaces);
+	displaySelectedPlaces(selectedPlaces, numPlaces);
 	lcd.fillRect(40, 85, 250, 40, MY_YELLOW);
 	lcd.fillTriangle(223, 222, 223, 232, 233, 227, MY_BLACK);
 	lcd.fillTriangle(220, 222, 220, 232, 210, 227, MY_BLACK);
@@ -81,7 +80,7 @@ void GUI::show_select_places_menu_background_elements(const bool selectedPlaces[
 	lcd.drawString("D:", 190, 220, FONT2);
 }
 
-void GUI::show_selected_places(const bool selectedPlaces[], const uint8_t numPlaces)
+void GraphicalUserInterface::displaySelectedPlaces(const bool selectedPlaces[], const uint8_t numPlaces)
 {
 	int32_t imageX = 10,imageY = 0, posX = 17, color;
 	lcd.pushImage(imageX, imageY, imageWidth, imageHeight, multiHeaterStirrerImage);
@@ -98,7 +97,7 @@ void GUI::show_selected_places(const bool selectedPlaces[], const uint8_t numPla
 	}
 }
 
-void GUI::highlight_current_place_in_select_places_menu(const bool selectedPlaces[], const uint8_t &currentPlace, const uint8_t numPlaces)
+void GraphicalUserInterface::highlightCurrentPlaceInSelectPlacesMenu(const bool selectedPlaces[], const uint8_t &currentPlace, const uint8_t numPlaces)
 {
 	uint32_t boxColorNumber, boxColorText;
 	uint8_t previousPlace, spacing;
@@ -148,7 +147,7 @@ void GUI::highlight_current_place_in_select_places_menu(const bool selectedPlace
 	lcd.drawString(textOption, 180, 170, FONT2);
 }
 
-void GUI::ask_to_exit_select_places()
+void GraphicalUserInterface::displayExitPromptForSelectPlacesMenu()
 {
 	lcd.fillRect(10, 85, 300, 115, MY_WHITE);
 	lcd.fillRect(0, 200, 320, 40, MY_SKYBLUE);
@@ -163,20 +162,20 @@ void GUI::ask_to_exit_select_places()
 	lcd.drawString("-PERMANECER: PRESIONE 'C'", 20, 180, FONT2);
 }
 
-void GUI::show_set_up_setpoints_and_times_menu_background_elements(const bool selectedPlaces[], const uint8_t numPlaces, const uint8_t &currentProcess)
+void GraphicalUserInterface::displaySetUpSetpointsAndTimesMenuBackgroundElements(const bool selectedPlaces[], const uint8_t numPlaces, const uint8_t &currentProcess)
 {
 	lcd.fillScreen(MY_SKYBLUE);
-	show_selected_places(selectedPlaces, numPlaces);
+	displaySelectedPlaces(selectedPlaces, numPlaces);
 	lcd.fillRect(10, 100, 300, 100, MY_WHITE);
 	lcd.fillRect(65, 80, 170, 20, MY_WHITE);
 	lcd.setFreeFont(TT1);
 	lcd.setTextColor(MY_BLACK);
 	lcd.drawString("PROCESO: " + (String)(currentProcess + 1) + " DE 20", 70, 80, FONT2);
-	clean_set_up_setpoints_and_times_menu_space();
+	clearMenuSpaceForSetUpSetpointsAndTimes();
 }
 
 
-void GUI::clean_set_up_setpoints_and_times_menu_space()
+void GraphicalUserInterface::clearMenuSpaceForSetUpSetpointsAndTimes()
 {
 	lcd.fillRect(10, 100, 300, 100, MY_WHITE);
 	lcd.fillRect(0, 200, 320, 40, MY_SKYBLUE);
@@ -189,7 +188,7 @@ void GUI::clean_set_up_setpoints_and_times_menu_space()
 	lcd.fillTriangle(213, 222, 223, 222, 218, 232, MY_BLACK);
 }
 
-void GUI::update_function_temperature_type_current_process(bool tempFunction)
+void GraphicalUserInterface::displayCurrentProcessTemperatureFunctionType(bool tempFunction)
 {
 	lcd.setFreeFont(TT1);
 	lcd.setTextColor(MY_BLACK);
@@ -201,7 +200,7 @@ void GUI::update_function_temperature_type_current_process(bool tempFunction)
 	}
 }
 
- void GUI::show_set_up_temperature_function_type_menu_background_elements()
+ void GraphicalUserInterface::displaySetUpTemperatureFunctionTypeMenuBackgroundElements()
  {
 	lcd.fillRect(10, 100, 300, 100, MY_WHITE);
 	lcd.fillRect(0, 200, 320, 40, MY_SKYBLUE);
@@ -216,7 +215,7 @@ void GUI::update_function_temperature_type_current_process(bool tempFunction)
 	lcd.drawString("RAMPA", 70, 170, FONT2);
  }
 
- void GUI::show_current_option_set_up_temperature_function_type_menu(const uint8_t &currentOption)
+ void GraphicalUserInterface::positionPointerOnCurrentOptionInSetUpTemperatureFunctionTypeMenu(const uint8_t &currentOption)
  {
 	uint8_t currentPosition, previousPosition;
 	switch (currentOption)
@@ -236,7 +235,7 @@ void GUI::update_function_temperature_type_current_process(bool tempFunction)
 	lcd.fillTriangle(50, currentPosition, 50, currentPosition + 10, 60, currentPosition + 5, MY_BLACK);
  }
 
-void GUI::update_temperatures_setpoints_current_process(const uint16_t &initTemp, const uint16_t &finalTemp)
+void GraphicalUserInterface::displayCurrentProcessTemperaturesSetpoints(const uint16_t &initTemp, const uint16_t &finalTemp)
 {
 	String initTempText, finalTempText;
 	if(initTemp == 0) {
@@ -261,7 +260,7 @@ void GUI::update_temperatures_setpoints_current_process(const uint16_t &initTemp
 	lcd.drawString("FINAL: " + finalTempText, 140, 140, FONT2);
 }
 
-void GUI::update_stirring_setpoints_current_process(const uint16_t &stirringSetpoint)
+void GraphicalUserInterface::displayCurrentProcessStirringSetpoint(const uint16_t &stirringSetpoint)
 {
 	String stirringSetpointText;
 	if(stirringSetpoint == 0) {
@@ -276,7 +275,7 @@ void GUI::update_stirring_setpoints_current_process(const uint16_t &stirringSetp
 	lcd.drawString("AGITACION: " + stirringSetpointText, 30, 160, FONT2);
 }
 
-void GUI::update_duration_current_process(const uint32_t &processDuration)
+void GraphicalUserInterface::displayCurrentProcessDuration(const uint32_t &processDuration)
 {
 	String processDurationText;
 	if(processDuration == 0) {
@@ -291,7 +290,7 @@ void GUI::update_duration_current_process(const uint32_t &processDuration)
 	lcd.drawString("DURACION: " + processDurationText, 30, 180, FONT2);
 }
 
-void GUI::show_current_option_set_up_setpoints_and_times_menu(uint8_t &currentOption)
+void GraphicalUserInterface::positionPointerOnCurrentOptionInSetUpSetpointsAndTimesMenu(uint8_t &currentOption)
 {
 	uint8_t currentPosition, previousPosition;
 	switch (currentOption)
@@ -321,7 +320,7 @@ void GUI::show_current_option_set_up_setpoints_and_times_menu(uint8_t &currentOp
 	lcd.fillTriangle(10, currentPosition, 10, currentPosition + 10, 20, currentPosition + 5, MY_BLACK);
 }
 
-void GUI::show_set_up_stirring_setpoints_menu_background_elements()
+void GraphicalUserInterface::displaySetUpStirringSetpointsMenuBackgroundElements()
 {
 	lcd.fillRect(10, 100, 300, 100, MY_WHITE);
 	lcd.fillRect(0, 200, 320, 40, MY_SKYBLUE);
@@ -335,7 +334,7 @@ void GUI::show_set_up_stirring_setpoints_menu_background_elements()
 	lcd.drawString("AGITACION: ", 70, 160, FONT2);
 }
 
-void GUI::show_rmp_value_set_up_stirring_setpoints_menu(const String &stirringSetpoint)
+void GraphicalUserInterface::displayRPMValueInSetUpStirringSetpointsMenu(const String &stirringSetpoint)
 {
 	lcd.setFreeFont(TT1);
 	lcd.setTextColor(MY_BLACK);
@@ -347,7 +346,7 @@ void GUI::show_rmp_value_set_up_stirring_setpoints_menu(const String &stirringSe
 	}
 }
 
-void GUI::show_set_up_constant_temperature_menu_background_elements()
+void GraphicalUserInterface::displaySetUpConstantTemperatureMenuBackgroundElements()
 {
 	lcd.fillRect(10, 100, 300, 100, MY_WHITE);
 	lcd.fillRect(0, 200, 320, 40, MY_SKYBLUE);
@@ -360,7 +359,7 @@ void GUI::show_set_up_constant_temperature_menu_background_elements()
 	lcd.drawString("TEMPERATURA:", 50, 160, FONT2);
 }
 
-void GUI::show_temp_value_set_up_constant_temperature_menu(const String &temp)
+void GraphicalUserInterface::displayTemperatureValueInSetUpConstantTemperatureMenu(const String &temp)
 {
 	lcd.setFreeFont(TT1);
 	lcd.setTextColor(MY_BLACK);
@@ -372,7 +371,7 @@ void GUI::show_temp_value_set_up_constant_temperature_menu(const String &temp)
 	}
 }
 
-void GUI::show_set_up_process_duration_menu_background_elements()
+void GraphicalUserInterface::displaySetUpProcessDurationMenuBackgroundElements()
 {
 	lcd.fillRect(10, 100, 300, 100, MY_WHITE);
 	lcd.fillRect(0, 200, 320, 40, MY_SKYBLUE);
@@ -386,7 +385,7 @@ void GUI::show_set_up_process_duration_menu_background_elements()
 	lcd.drawString("DURACION: ", 70, 160, FONT2);
 }
 
-void GUI::show_duration_value_set_up_process_duration_menu(const String &time)
+void GraphicalUserInterface::displayDurationValueInSetUpProcessDurationMenu(const String &time)
 {
 	lcd.setFreeFont(TT1);
 	lcd.setTextColor(MY_BLACK);
@@ -398,7 +397,7 @@ void GUI::show_duration_value_set_up_process_duration_menu(const String &time)
 	}
 }
 
-void GUI::show_set_up_ramp_temperature_menu_background_elements()
+void GraphicalUserInterface::displaySetUpRampTemperatureMenuBackgroundElements()
 {
 	lcd.fillRect(10, 100, 300, 100, MY_WHITE);
 	lcd.fillRect(0, 200, 320, 40, MY_SKYBLUE);
@@ -415,7 +414,7 @@ void GUI::show_set_up_ramp_temperature_menu_background_elements()
 	lcd.drawString("TEMP. FINAL: ", 40, 180, FONT2);
 }
 
-void GUI::show_rmp_value_set_up_ramp_temperature_menu(const String &initTemp, const String &finalTemp)
+void GraphicalUserInterface::displayTemperaturesValuesInSetUpRampTemperatureMenu(const String &initTemp, const String &finalTemp)
 {
 	lcd.setFreeFont(TT1);
 	lcd.setTextColor(MY_BLACK);
@@ -434,7 +433,7 @@ void GUI::show_rmp_value_set_up_ramp_temperature_menu(const String &initTemp, co
 	}
 }
 
-void GUI::show_current_option_set_up_ramp_temperature_menu(const uint8_t &currentOption)
+void GraphicalUserInterface::positionPointerOnCurrentOptionInSetUpRampTemperatureMenu(const uint8_t &currentOption)
 {
 	uint8_t currentPosition, previousPosition;
 	switch (currentOption)
@@ -454,7 +453,7 @@ void GUI::show_current_option_set_up_ramp_temperature_menu(const uint8_t &curren
 	lcd.fillTriangle(10, currentPosition, 10, currentPosition + 10, 20, currentPosition + 5, MY_BLACK);
 }
 
-void GUI::show_the_error_in_specifications_current_process(const bool &stirringAndTemp, const bool &duration)
+void GraphicalUserInterface::displayErrorInCurrentProcessSpecifications(const bool &stirringAndTemp, const bool &duration)
 {
 	lcd.fillRect(10, 100, 300, 100, MY_WHITE);
 	lcd.fillRect(0, 200, 320, 40, MY_SKYBLUE);
@@ -472,7 +471,7 @@ void GUI::show_the_error_in_specifications_current_process(const bool &stirringA
 	}
 }
 
-void GUI::ask_add_or_summarize_processes()
+void GraphicalUserInterface::displayPromptToAddOrSummarizeConfiguredProcesses()
 {
 	lcd.fillRect(10, 100, 300, 100, MY_WHITE);
 	lcd.fillRect(0, 200, 320, 40, MY_SKYBLUE);
@@ -486,10 +485,10 @@ void GUI::ask_add_or_summarize_processes()
 	lcd.drawString(" CONFIGURADO: PRESIONE 'C'", 20, 160, FONT2);
 }
 
-void GUI::show_summarize_the_defined_execution_specifications_background_elements(const bool selectedPlaces[], const uint8_t numPlaces)
+void GraphicalUserInterface::displaySummarizedExecutionSpecificationsMenuBackgroundElements(const bool selectedPlaces[], const uint8_t numPlaces)
 {
 	lcd.fillScreen(MY_SKYBLUE);
-	show_selected_places(selectedPlaces, numPlaces);
+	displaySelectedPlaces(selectedPlaces, numPlaces);
 	lcd.setFreeFont(TT1);
 	lcd.setTextColor(MY_BLACK);
 	lcd.fillRect(10, 100, 300, 100, MY_WHITE);
@@ -498,7 +497,7 @@ void GUI::show_summarize_the_defined_execution_specifications_background_element
 	lcd.drawString("C: SIGUIENTE", 190, 205, FONT2);
 }	
 
-void GUI::update_number_of_current_process(const uint8_t &currentProcess, const uint8_t &configuratedProcesses)
+void GraphicalUserInterface::displayNumberOfCurrentProcess(const uint8_t &currentProcess, const uint8_t &configuratedProcesses)
 {
 	lcd.fillRect(10, 100, 300, 100, MY_WHITE);
 	lcd.fillRect(65, 80, 170, 20, MY_WHITE);
@@ -507,19 +506,19 @@ void GUI::update_number_of_current_process(const uint8_t &currentProcess, const 
 	lcd.drawString("PROCESO: " + (String)(currentProcess + 1) + " DE " + (String)(configuratedProcesses + 1), 70, 80, FONT2);
 }
 
-void GUI::show_confirm_and_transmit_configurated_processes_background_elements()
+void GraphicalUserInterface::displayConfirmAndTransmitConfiguredProcessesMenuBackgroundElements()
 {
 	lcd.fillScreen(MY_SKYBLUE);
 	lcd.fillRect(10, 10, 300, 220, MY_WHITE);
 	lcd.drawString("PARA CONFIRMAR Y TRANSMITIR LOS", 50, 40, FONT2);
 	lcd.drawString("PROCESOS CONFIGURADOS A LA ", 60, 60, FONT2);
 	lcd.drawString("MULTIPARRILLA: PRESIONE 'C'", 65, 80, FONT2);
-	lcd.drawString("PARA REGRESAR PRESIONE B", 70, 130, FONT2);
+	lcd.drawString("PARA REGRESAR PRESIONE 'B'", 70, 130, FONT2);
 	lcd.drawString("B: REGRESAR", 20, 205, FONT2);
 	lcd.drawString("C: CONFIRMAR Y TRANSMITIR", 120, 205, FONT2);
 }
 
-void GUI::transmission_failed()
+void GraphicalUserInterface::displayTransmissionErrorMessage()
 {
 	lcd.fillRect(10, 10, 300, 180, MY_WHITE);
 	lcd.drawString("HUBO UN ERROR PARA COMUNICARSE CON", 30, 20, FONT2);
@@ -528,7 +527,7 @@ void GUI::transmission_failed()
 	lcd.drawString("PRESIONE 'C' PARA REINTENTAR", 60, 150, FONT2);
 }
 
-void GUI::transmission_succed()
+void GraphicalUserInterface::displayTransmissionSuccessMessage()
 {
 	lcd.fillScreen(MY_SKYBLUE);
 	lcd.fillRect(10, 10, 300, 220, MY_GREEN);
