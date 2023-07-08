@@ -41,13 +41,10 @@ class HMI
     private:
         ProcessesSpecificationsMessage processesSpecifications;
         void initializeProcessesSpecificationsStruct();
-        
-        Keyboard keyboard{};
         RemoteCommunication remoteCommunication{};
         void mainMenu();
         void defineExecutionSpecifications();
-       //Functions to set up the execution specifications
-       //Funciones para configurar las especificaciones de ejecución
+       
         MenuNavigationOptions selectPlacesMenu();
         MenuNavigationOptions confirmExitSelectPlaces();
         bool validateSelectedPlacesArray();
