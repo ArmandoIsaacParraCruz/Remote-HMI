@@ -24,13 +24,23 @@ void RemoteCommunication::receiveData(const uint8_t *mac_addr, esp_now_send_stat
 */
 void RemoteCommunication::beginRemoteCommunication()
 {
-    WiFi.mode(WIFI_MODE_STA);
-    ESPNow.set_mac(mac_HMI);
+    WiFi.mode(WIFI_STA);
     WiFi.disconnect();
-    ESPNow.init();
+    // Inicializar esp_now
+    if (esp_now_init() != ESP_OK) {
+        Serial.println("Error al inicializar esp_now");
+    }
+    esp_now_peer_info_t peerInfo;
+    memcpy(peerInfo.peer_addr, mac_multiHeaterStirrer, 6);
+    peerInfo.channel = 0;
+    peerInfo.encrypt = false;
+    if (esp_now_add_peer(&peerInfo) != ESP_OK) {
+        Serial.println("Error al agregar el receptor");
+    }
 	esp_now_register_send_cb(receiveData);
-    ESPNow.add_peer(mac_multiHeaterStirrer);
 }
+
+
 bool RemoteCommunication::testConnection()
 {
     return true;
