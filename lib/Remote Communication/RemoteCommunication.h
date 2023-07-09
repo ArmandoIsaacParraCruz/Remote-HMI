@@ -1,7 +1,9 @@
 #pragma once
 #include <Arduino.h>
 #include <WiFi.h>
-#include "ESPNowW.h"
+#include <esp_now.h>
+
+
 #define NUMBER_OF_PLACES        6
 #define NUMBER_OF_PROCESS       15
 #define MAX_TEMPERATURE         300
