@@ -41,10 +41,8 @@ class HMI
     private:
         ProcessesSpecificationsMessage processesSpecifications;
         void initializeProcessesSpecificationsStruct();
-        RemoteCommunication remoteCommunication{};
         void mainMenu();
         void defineExecutionSpecifications();
-       
         MenuNavigationOptions selectPlacesMenu();
         MenuNavigationOptions confirmExitSelectPlaces();
         bool validateSelectedPlacesArray();

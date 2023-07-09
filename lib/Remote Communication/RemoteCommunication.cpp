@@ -1,40 +1,53 @@
 #include "RemoteCommunication.h"
 
+uint8_t RemoteCommunication::mac_multiHeaterStirrer[6] = {0x40, 0x91, 0x51, 0xAB , 0x1B, 0xC0};
+uint8_t RemoteCommunication::mac_HMI[6] = {0x0C, 0xB8, 0x15, 0xC1, 0x9A, 0xD4};
+bool RemoteCommunication::messageReceived;
+
 /**Set up the parameters to stablish the remote communication
  * Configura los parámetros para establecer la comunicación remota
 */
-RemoteCommunication::RemoteCommunication()
+void RemoteCommunication::receiveData(const uint8_t *mac_addr, esp_now_send_status_t status)
 {
-    WiFi.mode(WIFI_MODE_STA);
-    ESPNow.set_mac(mac_HMI);
-    WiFi.disconnect();
-    ESPNow.init();
-    ESPNow.reg_recv_cb(receiveData);
-    ESPNow.add_peer(mac_multiHeaterStirrer);
-}
-
-void RemoteCommunication::receiveData(const uint8_t *mac_receiver, const uint8_t *data, int data_len)
-{
+    if (status == ESP_NOW_SEND_SUCCESS) {
+    	Serial.println("Mensaje enviado correctamente");
+		messageReceived = true;
+    } else {
+    	Serial.println("Error al enviar el mensaje");
+		messageReceived = false;
+    }
 
 }
 
 /**Test the connection between the multi heater stirrer and the remote control device
  * Prueba la conexión entre la multiparrilla agitatora y el dispositivo remotor de control
 */
+void RemoteCommunication::beginRemoteCommunication()
+{
+    WiFi.mode(WIFI_MODE_STA);
+    ESPNow.set_mac(mac_HMI);
+    WiFi.disconnect();
+    ESPNow.init();
+	esp_now_register_send_cb(receiveData);
+    ESPNow.add_peer(mac_multiHeaterStirrer);
+}
 bool RemoteCommunication::testConnection()
 {
-    testConnection();
-    myDelay(30);
-    esp_now_register_send_cb([](const uint8_t* mac, esp_now_send_status_t status) {
-        status == ESP_NOW_SEND_SUCCESS ? connected = true : connected = false;
-        //Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Entrega exitosa" : "Entrega fallida");
-    });
-    return connected;
+    return true;
 }
 
-bool RemoteCommunication::sendProcessesConfigurated()
+bool RemoteCommunication::sendProcessesConfigurated(ProcessesSpecificationsMessage& message)
 {
-    return false;
+    esp_err_t internalProcessStatus = esp_now_send(mac_multiHeaterStirrer, reinterpret_cast<uint8_t*>(&message), sizeof(message));
+	
+    if(internalProcessStatus == ESP_OK) {
+        Serial.println("Internal Process to send data was succeed");
+    } else {
+		Serial.println("Internal Process to send data failed");
+	}
+	myDelay(50);
+	Serial.print("received: "); Serial.println(messageReceived);
+    return messageReceived;
 }
 
 /**This function allows implement a non-blocking delay
@@ -44,7 +57,8 @@ void RemoteCommunication::myDelay(unsigned long timeDuration)
 {
     unsigned long currentTime = millis();
     while(millis() - currentTime <= timeDuration){
-        currentTime = millis();
+        //currentTime = millis();
     }
 }
+
 

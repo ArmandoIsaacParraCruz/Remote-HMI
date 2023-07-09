@@ -13,6 +13,7 @@ HMI::HMI()
 */
 void HMI::runHMIMainLoop()
 {
+    RemoteCommunication::beginRemoteCommunication();
     GraphicalUserInterface::beginGraphicalUserInterface();
     GraphicalUserInterface::displayUamLogo();
     while(true)
@@ -653,7 +654,7 @@ MenuNavigationOptions HMI::confirmAndTransmitConfiguredProcessesMenu()
         if(keyPressed == 'B') {
             return MenuNavigationOptions::Backward;
         } else if(keyPressed == 'C') {
-            if(remoteCommunication.sendProcessesConfigurated()) {
+            if(RemoteCommunication::sendProcessesConfigurated(processesSpecifications)) {
                 break;
             } else {
                 GraphicalUserInterface::displayTransmissionErrorMessage();

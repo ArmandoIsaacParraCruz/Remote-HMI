@@ -170,7 +170,7 @@ void GraphicalUserInterface::displaySetUpSetpointsAndTimesMenuBackgroundElements
 	lcd.fillRect(65, 80, 170, 20, MY_WHITE);
 	lcd.setFreeFont(TT1);
 	lcd.setTextColor(MY_BLACK);
-	lcd.drawString("PROCESO: " + (String)(currentProcess + 1) + " DE 20", 70, 80, FONT2);
+	lcd.drawString("PROCESO: " + (String)(currentProcess + 1) + " DE 15", 70, 80, FONT2);
 	clearMenuSpaceForSetUpSetpointsAndTimes();
 }
 
