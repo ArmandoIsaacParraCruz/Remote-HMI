@@ -37,7 +37,7 @@ class HMI
 {
     public:
         HMI();  
-        void runHMIMainLoop();
+        void runHMI();
     private:
         ProcessesSpecificationsMessage processesSpecifications;
         void initializeProcessesSpecificationsStruct();

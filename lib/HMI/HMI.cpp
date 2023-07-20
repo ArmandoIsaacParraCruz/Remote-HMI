@@ -11,7 +11,7 @@ HMI::HMI()
 /**This is the main loop program in the project
  * Este es el bucle principal del proyecto 
 */
-void HMI::runHMIMainLoop()
+void HMI::runHMI()
 {
     RemoteCommunication::beginRemoteCommunication();
     GraphicalUserInterface::beginGraphicalUserInterface();
@@ -453,7 +453,10 @@ void HMI::setUpRampTemperatureMenu(const uint8_t &currentProcess)
             switch (keyPressed)
             {
                 case 'A':
-                    if( initialTemperature.toInt() > 0 && finalTemperature.toInt() <= MAX_TEMPERATURE && finalTemperature.toInt() > initialTemperature.toInt()) {
+                    if( initialTemperature.toInt() > 0 && 
+                        finalTemperature.toInt() <= MAX_TEMPERATURE && 
+                        finalTemperature.toInt() > initialTemperature.toInt()) {
+
                         processesSpecifications.temperatureSetpoints[currentProcess].initialTemperature = (uint16_t)(initialTemperature.toInt());
                         processesSpecifications.temperatureSetpoints[currentProcess].finalTemperature = (uint16_t)(finalTemperature.toInt());
                         menuOption = MenuNavigationOptions::Exit;
@@ -564,7 +567,9 @@ String HMI::processValueString(const String &value, const char keyPressed, const
 bool HMI::verifySpecificationsCurrentProcess(const uint8_t &currentProcess)
 {
     bool stirringAndTempVerified = true, durationVerified = true;
-    if(processesSpecifications.stirringSetpoints[currentProcess] == 0 && processesSpecifications.temperatureSetpoints[currentProcess].initialTemperature == 0) {
+    if(processesSpecifications.stirringSetpoints[currentProcess] == 0 && 
+        processesSpecifications.temperatureSetpoints[currentProcess].initialTemperature == 0) {
+
         stirringAndTempVerified = false;
     }
 
