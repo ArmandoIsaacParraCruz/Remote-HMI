@@ -26,12 +26,10 @@ char Keyboard::getValidKey(std::vector<char> &validKeys)
         
         for(char& validKey: validKeys) {
             if(keyPressed == validKey) {
-                goto exit;
+                return keyPressed;
             } 
         }
     }
-    exit:
-    return keyPressed;
 }
 
 /**
@@ -53,5 +51,8 @@ char Keyboard::ignoreIvalidKeys(std::vector<char> &invalidKeys)
         } 
     }
    return keyPressed; 
-} 
-
+}
+char Keyboard::getKey()
+{
+    return keypad.getKey();
+}

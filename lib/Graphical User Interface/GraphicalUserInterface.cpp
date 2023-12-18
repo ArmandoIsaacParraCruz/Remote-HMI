@@ -566,17 +566,46 @@ void GraphicalUserInterface::monitorMultiHeaterStirrerMenuBackgroundElements()
 	lcd.setFreeFont(TT1);
 	lcd.drawCircle(4, 95, 2, MY_BLACK);
 	lcd.drawString("C", 10, 95, FONT2);
-	lcd.drawString("RPM", 0, 135, FONT2);
-	lcd.drawString("STATUS:", 10, 180, FONT2);
+	lcd.drawString("RPM", 0, 140, FONT2);
+	lcd.drawString("TEMP. SIR:", 5, 180, FONT2);
+	lcd.drawCircle(130, 180, 2, MY_BLACK);
+	lcd.drawString("C", 135,180,FONT2);
 	lcd.drawString("TIEMPO:", 170, 180, FONT2);
-
-
 	lcd.drawString("B: REGRESAR", 10, 210, FONT2);
 	lcd.drawString("C: DETENER PROCESO", 170, 210, FONT2);
 }
 
-void GraphicalUserInterface::displaymanualUserAdjustmentMenuBackgroundElements()
+
+
+void GraphicalUserInterface::displayTemperatureInMonitorMultiHeaterStirrerMenu(uint16_t& temperature, uint8_t& i)
+{
+	uint16_t xpos = 30, ypos = 95, spacing = 50;
+	lcd.fillRect(xpos + i*spacing , ypos, 40, 15, MY_WHITE);
+	lcd.drawString((String)temperature,xpos + i*spacing , ypos, FONT2);
+}
+
+void GraphicalUserInterface::displayRPMInMonitorMultiHeaterStirrerMenu(uint16_t& RPM, uint8_t &i)
+{
+	uint16_t xpos = 30, ypos = 140, spacing = 50;
+	lcd.fillRect(xpos + i*spacing , ypos, 40, 15, MY_WHITE);
+	lcd.drawString((String)RPM,xpos + i*spacing , ypos, FONT2);
+}
+
+void GraphicalUserInterface::displayTSIRInMonitorMultiHeaterStirrerMenu(float &temperatura)
+{
+	lcd.fillRect(80 , 180, 45, 15, MY_WHITE);
+	lcd.drawString((String)temperatura, 80, 180, FONT2);
+}
+
+void GraphicalUserInterface::displayTimeInMonitorMultiHeaterStirrerMenu(uint32_t& time)
+{
+	lcd.fillRect(230 , 180, 120, 15, MY_WHITE);
+	lcd.drawString((String)time + "s",230 , 180, FONT2);
+}
+
+void GraphicalUserInterface::displayManualUserAdjustmentMenuBackgroundElements()
 {
 	lcd.fillScreen(MY_SKYBLUE);
+	
 	lcd.drawString("B: REGRESAR", 20, 205, FONT2);
 }

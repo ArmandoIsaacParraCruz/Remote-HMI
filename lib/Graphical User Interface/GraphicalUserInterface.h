@@ -8,6 +8,7 @@
 #include "Logo_UAM.h"   
 #include "My_Colors.h"  
 #include "multiHeaterStirrerImage.h"
+#include "StructureMessages.h"
 
 
 class GraphicalUserInterface
@@ -46,8 +47,13 @@ class GraphicalUserInterface
         static void displayConfirmAndTransmitConfiguredProcessesMenuBackgroundElements();
         static void displayTransmissionErrorMessage();
         static void displayTransmissionSuccessMessage();
+        
         static void monitorMultiHeaterStirrerMenuBackgroundElements();
-        static void displaymanualUserAdjustmentMenuBackgroundElements();
+        static void displayTemperatureInMonitorMultiHeaterStirrerMenu(uint16_t& temperature, uint8_t& i);
+        static void displayRPMInMonitorMultiHeaterStirrerMenu(uint16_t& RPM, uint8_t& i);
+        static void displayTSIRInMonitorMultiHeaterStirrerMenu(float& temperatura);
+        static void displayTimeInMonitorMultiHeaterStirrerMenu(uint32_t& time);
+        static void displayManualUserAdjustmentMenuBackgroundElements();
         
     private:
         static TFT_eSPI lcd;

@@ -2,41 +2,8 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <esp_now.h>
-
-
-#define NUMBER_OF_PLACES        6
-#define NUMBER_OF_PROCESS       15
-#define MAX_TEMPERATURE         300
-#define MAX_TEMPERATURE_DIGIT   999
-#define MAX_RPM                 1200
-#define MAX_RPM_DIGITS          9999
-#define MAX_TIME                180
-#define MAX_TIME_DIGITS         999  
-
-
-
-enum TemperatureFunctionType{constant, ramp};
-
-struct TemperatureSetpoint {
-            uint16_t initialTemperature;
-            uint16_t finalTemperature;
-            TemperatureFunctionType tempFunction;
-};
-
-struct ProcessesSpecificationsMessage{
-    bool selectedPlaces[NUMBER_OF_PLACES];
-    TemperatureSetpoint temperatureSetpoints[NUMBER_OF_PROCESS];
-    uint16_t stirringSetpoints[NUMBER_OF_PROCESS]; 
-    uint32_t processDuration[NUMBER_OF_PROCESS];
-    uint8_t configuredProcesses;
-};
-
-struct measurementsToSend {
-    float temperatures[NUMBER_OF_PLACES];
-    float RPM[NUMBER_OF_PLACES];
-    uint32_t timeInSencods;
-    bool status;
-};
+#include "GraphicalUserInterface.h"
+#include "StructureMessages.h"
 
 
 
@@ -47,13 +14,16 @@ class RemoteCommunication
         static void beginRemoteCommunication();
         static bool testConnection();
         static bool sendProcessesConfigurated(ProcessesSpecificationsMessage& message);
+        static void myDelay(unsigned long timeDuration); 
+        static struct measurements measurements;
+        static struct manualAdjustmentParameters manualAdjustmentParameters;
+        static volatile bool receiveMeasurements;
+
     private:
         static bool messageReceived;
         static uint8_t mac_multiHeaterStirrer[6];
         static uint8_t mac_HMI[6];
         static esp_now_peer_info_t peerInfo;
-        static struct measurementsToSend measurementsToSend;
         static void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status);
-        static void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len);
-        static void myDelay(unsigned long timeDuration); 
+        static void IRAM_ATTR OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len);     
 };

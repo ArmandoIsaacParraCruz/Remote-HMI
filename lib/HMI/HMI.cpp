@@ -79,15 +79,15 @@ void HMI::mainMenu()
                 if (option == 1) {
                     // Go to menu: defineExecutionSpecifications();
                     // Ir al menú: defineExecutionSpecifications();
-                    defineExecutionSpecifications();
+                    defineExecutionSpecificationsMenu();
                 } else if (option == 2) {
                     // Go to menu: monitorMultiHeaterStirrer();
                     // Ir al menú: monitorMultiHeaterStirrer();
-                    monitorMultiHeaterStirrer();
+                    monitorMultiHeaterStirrerMenu();
                 } else if (option == 3) {
                     // Go to menu: displayManualAdjustmentMenu;
                     // Ir al menú: displayManualAdjustmentMenu();
-                    manualUserAdjustment();
+                    manualUserAdjustmentMenu();
                 }
                 continue_menu = false;
                 break;
@@ -115,7 +115,7 @@ void HMI::mainMenu()
  * This function implements the menus to define the execution specifications
  * Esta función implementa los menús para definir las especificaciones de ejecución
 */
-void HMI::defineExecutionSpecifications()
+void HMI::defineExecutionSpecificationsMenu()
 {
     initializeProcessesSpecificationsStruct();
     uint8_t currentMenu = 0;
@@ -676,40 +676,72 @@ MenuNavigationOptions HMI::confirmAndTransmitConfiguredProcessesMenu()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void HMI::monitorMultiHeaterStirrer()
+void HMI::monitorMultiHeaterStirrerMenu()
 {  
     char keyPressed = NO_KEY;
-    std::vector<char> validKeys = {'B'};
     GraphicalUserInterface::monitorMultiHeaterStirrerMenuBackgroundElements();
+    uint32_t currentTime = millis();
     while (true)
     {
-        keyPressed = Keyboard::getValidKey(validKeys);
-
-        if(keyPressed == 'B') {
+        keyPressed = Keyboard::getKey();
+        if(keyPressed == 'B'){
             break;
-        } else {
-            
+        } else if(keyPressed == 'C') {
+            break;;
         }
-    }
+
+        if(millis() - currentTime >= 1000){
+            Serial.println("Temperatura");
+            for(uint8_t i = 0; i < NUMBER_OF_PLACES; ++i) {
+                uint16_t temperature = (uint16_t)RemoteCommunication::measurements.temperatures[i];
+                GraphicalUserInterface::displayTemperatureInMonitorMultiHeaterStirrerMenu(temperature, i);
+            }
+            Serial.println("RPM");
+            for(uint8_t i = 0; i < NUMBER_OF_PLACES; ++i) {
+                uint16_t RPM = (uint16_t)RemoteCommunication::measurements.RPM[i];
+                GraphicalUserInterface::displayRPMInMonitorMultiHeaterStirrerMenu(RPM, i);
+            }
+
+            GraphicalUserInterface::displayTSIRInMonitorMultiHeaterStirrerMenu(RemoteCommunication::measurements.infraredSensorTemp);
+            GraphicalUserInterface::displayTimeInMonitorMultiHeaterStirrerMenu(RemoteCommunication::measurements.timeInSencods);
+            currentTime = millis();
+        }
+           
+    } 
+        
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void HMI::manualUserAdjustment()
+void HMI::manualUserAdjustmentMenu()
 {
     char keyPressed = NO_KEY;
-    std::vector<char> validKeys = {'B'};
-    GraphicalUserInterface::displaymanualUserAdjustmentMenuBackgroundElements();
+    GraphicalUserInterface::manualUserAdjustmentMenuBackgroundElements();
+    uint32_t currentTime = millis();
     while (true)
     {
-        keyPressed = Keyboard::getValidKey(validKeys);
-
-        if(keyPressed == 'B') {
+        keyPressed = Keyboard::getKey();
+        if(keyPressed == 'B'){
             break;
-        } else {
-            
         }
-    }
+
+        if(millis() - currentTime >= 1000){
+            Serial.println("Temperatura");
+            for(uint8_t i = 0; i < NUMBER_OF_PLACES; ++i) {
+                uint16_t temperature = (uint16_t)RemoteCommunication::measurements.temperatures[i];
+                GraphicalUserInterface::displayTemperatureInMonitorMultiHeaterStirrerMenu(temperature, i);
+            }
+            Serial.println("RPM");
+            for(uint8_t i = 0; i < NUMBER_OF_PLACES; ++i) {
+                uint16_t RPM = (uint16_t)RemoteCommunication::measurements.RPM[i];
+                GraphicalUserInterface::displayRPMInMonitorMultiHeaterStirrerMenu(RPM, i);
+            }
+
+            GraphicalUserInterface::displayTSIRInMonitorMultiHeaterStirrerMenu(RemoteCommunication::measurements.infraredSensorTemp);
+            currentTime = millis();
+        }
+           
+    } 
 }
 
 

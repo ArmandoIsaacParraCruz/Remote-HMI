@@ -4,32 +4,7 @@
 #include "GraphicalUserInterface.h"
 #include "RemoteCommunication.h"
 #include "keyboard.h"
-
-/*
-NUMBER_OF_PLACES = 6
-NUMBER_OF_PROCESS = 20
-MAX_TEMPERATURE = 300
-MAX_TEMPERATURE_DIGIT = 999
-MAX_RPM = 1200
-MAX_RPM_DIGITS = 9999
-MAX_TIME = 180
-MAX_TIME_DIGITS = 999  
-*/      
-
-/*enum TemperatureFunctionType{constant, ramp};
-struct TemperatureSetpoint {
-            uint16_t initialTemperature;
-            uint16_t finalTemperature;
-            TemperatureFunctionType tempFunction;
-};
-
-struct ProcessesSpecificationsMessage{
-    bool selectedPlaces[NUMBER_OF_PLACES];
-    TemperatureSetpoint temperatureSetpoints[NUMBER_OF_PROCESS];
-    uint16_t stirringSetpoints[NUMBER_OF_PROCESS]; 
-    uint32_t processDuration[NUMBER_OF_PROCESS];
-    uint8_t configuredProcesses;
-};*/
+#include "StructureMessages.h"
 
 enum class MenuNavigationOptions{Forward, Backward, Exit, Continue};
 
@@ -43,7 +18,7 @@ class HMI
         void initializeProcessesSpecificationsStruct();
         void mainMenu();
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        void defineExecutionSpecifications();
+        void defineExecutionSpecificationsMenu();
         MenuNavigationOptions selectPlacesMenu();
         MenuNavigationOptions confirmExitSelectPlaces();
         bool validateSelectedPlacesArray();
@@ -63,7 +38,7 @@ class HMI
         MenuNavigationOptions summarizeDefinedExecutionSpecificationsMenu();
         MenuNavigationOptions confirmAndTransmitConfiguredProcessesMenu();
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        void monitorMultiHeaterStirrer();
+        void monitorMultiHeaterStirrerMenu();
         ////////////////////////////////////////////////////////////////////////////////////////////////////
-        void manualUserAdjustment();
+        void manualUserAdjustmentMenu();
 };

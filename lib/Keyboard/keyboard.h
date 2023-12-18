@@ -11,6 +11,7 @@ class Keyboard
         Keyboard() = default;
         static char getValidKey(std::vector<char>& validKeys);
         static char ignoreIvalidKeys(std::vector<char> &invalidKeys);
+        static char getKey();
     private:
         static byte rowsPins[ROWS]; 
         static byte columnsPins[COLUMNS]; 
