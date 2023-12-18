@@ -42,7 +42,7 @@ class HMI
         ProcessesSpecificationsMessage processesSpecifications;
         void initializeProcessesSpecificationsStruct();
         void mainMenu();
-        ///////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
         void defineExecutionSpecifications();
         MenuNavigationOptions selectPlacesMenu();
         MenuNavigationOptions confirmExitSelectPlaces();
@@ -62,6 +62,8 @@ class HMI
         MenuNavigationOptions addOrSummarizeProcessesMenu();
         MenuNavigationOptions summarizeDefinedExecutionSpecificationsMenu();
         MenuNavigationOptions confirmAndTransmitConfiguredProcessesMenu();
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        void monitorMultiHeaterStirrer();
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         void manualUserAdjustment();
 };

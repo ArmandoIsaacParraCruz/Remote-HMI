@@ -46,6 +46,7 @@ class GraphicalUserInterface
         static void displayConfirmAndTransmitConfiguredProcessesMenuBackgroundElements();
         static void displayTransmissionErrorMessage();
         static void displayTransmissionSuccessMessage();
+        static void monitorMultiHeaterStirrerMenuBackgroundElements();
         static void displaymanualUserAdjustmentMenuBackgroundElements();
         
     private:

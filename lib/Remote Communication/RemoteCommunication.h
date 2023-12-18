@@ -31,6 +31,15 @@ struct ProcessesSpecificationsMessage{
     uint8_t configuredProcesses;
 };
 
+struct measurementsToSend {
+    float temperatures[NUMBER_OF_PLACES];
+    float RPM[NUMBER_OF_PLACES];
+    uint32_t timeInSencods;
+    bool status;
+};
+
+
+
 class RemoteCommunication
 {
     public:
@@ -42,6 +51,9 @@ class RemoteCommunication
         static bool messageReceived;
         static uint8_t mac_multiHeaterStirrer[6];
         static uint8_t mac_HMI[6];
-        static void receiveData(const uint8_t *mac_addr, esp_now_send_status_t status);
+        static esp_now_peer_info_t peerInfo;
+        static struct measurementsToSend measurementsToSend;
+        static void OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status);
+        static void OnDataRecv(const uint8_t * mac, const uint8_t *incomingData, int len);
         static void myDelay(unsigned long timeDuration); 
 };

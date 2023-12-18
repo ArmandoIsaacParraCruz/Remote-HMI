@@ -6,12 +6,14 @@ uint8_t RemoteCommunication::mac_HMI[6] = {0x40, 0x91, 0x51, 0xAB, 0x1B, 0xC0};
 
 bool RemoteCommunication::messageReceived;
 
-esp_now_peer_info_t peerInfo;
+esp_now_peer_info_t RemoteCommunication::peerInfo;
+
+struct measurementsToSend RemoteCommunication::measurementsToSend;
 
 /**Set up the parameters to stablish the remote communication
  * Configura los parámetros para establecer la comunicación remota
 */
-void RemoteCommunication::receiveData(const uint8_t *mac_addr, esp_now_send_status_t status)
+void RemoteCommunication::OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status)
 {
     if (status == ESP_NOW_SEND_SUCCESS) {
     	Serial.println("Delivery Success");
@@ -21,6 +23,27 @@ void RemoteCommunication::receiveData(const uint8_t *mac_addr, esp_now_send_stat
 		messageReceived = false;
     }
 
+}
+
+void RemoteCommunication::OnDataRecv(const uint8_t *mac, const uint8_t *incomingData, int len)
+{
+    memcpy(&measurementsToSend, incomingData, sizeof(measurementsToSend));
+    Serial.println("Temperatures:");
+    for(uint8_t i = 0; i < NUMBER_OF_PLACES; ++i) {
+        Serial.print(measurementsToSend.temperatures[i]);
+        Serial.print(" ");
+    }
+    Serial.println("");
+    Serial.println("RPM:");
+    for(uint8_t i = 0; i < NUMBER_OF_PLACES; ++i) {
+        Serial.print(measurementsToSend.RPM[i]);
+        Serial.print(" ");
+    }
+    Serial.println("");
+    Serial.print("Time in seconds: ");
+    Serial.println(measurementsToSend.timeInSencods);
+    Serial.print("Status: ");
+    Serial.println(measurementsToSend.status);
 }
 
 /**Test the connection between the multi heater stirrer and the remote control device
@@ -33,8 +56,9 @@ void RemoteCommunication::beginRemoteCommunication()
     if (esp_now_init() != ESP_OK) {
         Serial.println("Error initializing ESP-NOW");
     }
-    esp_now_register_send_cb(receiveData);
 
+    esp_now_register_send_cb(OnDataSent);
+    esp_now_register_recv_cb(OnDataRecv);
     
 
     memcpy(peerInfo.peer_addr, mac_multiHeaterStirrer, 6);
@@ -45,6 +69,7 @@ void RemoteCommunication::beginRemoteCommunication()
         Serial.println("Failed to add peer");
     }
 	
+    
 }
 
 

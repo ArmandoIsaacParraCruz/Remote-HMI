@@ -81,9 +81,9 @@ void HMI::mainMenu()
                     // Ir al menú: defineExecutionSpecifications();
                     defineExecutionSpecifications();
                 } else if (option == 2) {
-                    // Go to menu: monitor_stirring_and_temperature();
-                    // Ir al menú: monitor_stirring_and_temperature();
-                    // monitor_stirring_and_temperature();
+                    // Go to menu: monitorMultiHeaterStirrer();
+                    // Ir al menú: monitorMultiHeaterStirrer();
+                    monitorMultiHeaterStirrer();
                 } else if (option == 3) {
                     // Go to menu: displayManualAdjustmentMenu;
                     // Ir al menú: displayManualAdjustmentMenu();
@@ -676,9 +676,40 @@ MenuNavigationOptions HMI::confirmAndTransmitConfiguredProcessesMenu()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void HMI::monitorMultiHeaterStirrer()
+{  
+    char keyPressed = NO_KEY;
+    std::vector<char> validKeys = {'B'};
+    GraphicalUserInterface::monitorMultiHeaterStirrerMenuBackgroundElements();
+    while (true)
+    {
+        keyPressed = Keyboard::getValidKey(validKeys);
+
+        if(keyPressed == 'B') {
+            break;
+        } else {
+            
+        }
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void HMI::manualUserAdjustment()
 {
-    RemoteCommunication::sendProcessesConfigurated(processesSpecifications);
+    char keyPressed = NO_KEY;
+    std::vector<char> validKeys = {'B'};
+    GraphicalUserInterface::displaymanualUserAdjustmentMenuBackgroundElements();
+    while (true)
+    {
+        keyPressed = Keyboard::getValidKey(validKeys);
+
+        if(keyPressed == 'B') {
+            break;
+        } else {
+            
+        }
+    }
 }
 
 

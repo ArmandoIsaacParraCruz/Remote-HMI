@@ -538,6 +538,43 @@ void GraphicalUserInterface::displayTransmissionSuccessMessage()
 	lcd.drawString("PRESIONE 'A' PARA SALIR", 30, 100);
 }
 
+void GraphicalUserInterface::monitorMultiHeaterStirrerMenuBackgroundElements()
+{
+	lcd.fillScreen(MY_SKYBLUE);
+	
+	lcd.setTextColor(MY_BLACK);
+	int32_t imageX = 20,imageY = 0, posX = 27;
+	lcd.pushImage(imageX, imageY, imageWidth, imageHeight, multiHeaterStirrerImage);
+	lcd.setTextColor(MY_BLACK);
+	lcd.setFreeFont(FF47);
+
+	for(uint8_t currentPlace = 0; currentPlace < 6; ++currentPlace, posX+=50) {
+		lcd.drawString((String)(currentPlace+1),posX + 7, 6);
+	}
+
+	lcd.fillRect(0, 85, 320, 115, MY_WHITE);
+	lcd.drawLine(25,85,25,170,MY_BLACK);
+	lcd.drawLine(75,85,75,170,MY_BLACK);
+	lcd.drawLine(125,85,125,170,MY_BLACK);
+	lcd.drawLine(175,85,175,170,MY_BLACK);
+	lcd.drawLine(225,85,225,170,MY_BLACK);
+	lcd.drawLine(275,85,275,170,MY_BLACK);
+
+	lcd.drawLine(0,125,320,125,MY_BLACK);
+	lcd.drawLine(0,170,320,170, MY_BLACK);
+
+	lcd.setFreeFont(TT1);
+	lcd.drawCircle(4, 95, 2, MY_BLACK);
+	lcd.drawString("C", 10, 95, FONT2);
+	lcd.drawString("RPM", 0, 135, FONT2);
+	lcd.drawString("STATUS:", 10, 180, FONT2);
+	lcd.drawString("TIEMPO:", 170, 180, FONT2);
+
+
+	lcd.drawString("B: REGRESAR", 10, 210, FONT2);
+	lcd.drawString("C: DETENER PROCESO", 170, 210, FONT2);
+}
+
 void GraphicalUserInterface::displaymanualUserAdjustmentMenuBackgroundElements()
 {
 	lcd.fillScreen(MY_SKYBLUE);
