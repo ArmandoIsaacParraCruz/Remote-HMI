@@ -59,8 +59,8 @@ void GraphicalUserInterface::highlightCurrentOptionInMainMenu(const uint8_t &opt
     lcd.drawString("MONITOREAR", 110, 95);
     lcd.drawString("MULTIPARRILLA", 95, 110);
 
-    lcd.drawString("ESTADO DEL ENLACE",70, 165);
-	lcd.drawString("Y SALIDA DE DATOS",70, 180);
+    lcd.drawString("VISUALIZAR AJUSTE",70, 165);
+	lcd.drawString("      MANUAL",70, 180);
 }
 
 void GraphicalUserInterface::displaySelectPlacesMenuBackgroundElements(const bool selectedPlaces[], const uint8_t numPlaces)
@@ -536,4 +536,10 @@ void GraphicalUserInterface::displayTransmissionSuccessMessage()
 	lcd.drawString("SE ENVIARON LOS PROCESOS", 20, 40);
 	lcd.drawString("CONFIGURADOS CORRECTAMENTE", 20, 70);
 	lcd.drawString("PRESIONE 'A' PARA SALIR", 30, 100);
+}
+
+void GraphicalUserInterface::displaymanualUserAdjustmentMenuBackgroundElements()
+{
+	lcd.fillScreen(MY_SKYBLUE);
+	lcd.drawString("B: REGRESAR", 20, 205, FONT2);
 }

@@ -46,6 +46,7 @@ class GraphicalUserInterface
         static void displayConfirmAndTransmitConfiguredProcessesMenuBackgroundElements();
         static void displayTransmissionErrorMessage();
         static void displayTransmissionSuccessMessage();
+        static void displaymanualUserAdjustmentMenuBackgroundElements();
         
     private:
         static TFT_eSPI lcd;

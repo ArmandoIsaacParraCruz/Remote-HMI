@@ -23,6 +23,7 @@ char Keyboard::getValidKey(std::vector<char> &validKeys)
     // Wait for a key press
     while (true) {
         keyPressed = keypad.getKey();
+        
         for(char& validKey: validKeys) {
             if(keyPressed == validKey) {
                 goto exit;
@@ -43,6 +44,7 @@ char Keyboard::ignoreIvalidKeys(std::vector<char> &invalidKeys)
     bool keyPressedValid = false; 
     while(!keyPressedValid){  
         keyPressed = keypad.getKey();
+        
         if(keyPressed != NO_KEY) {
             keyPressedValid = true;
             for(char& invalidKey: invalidKeys) { 

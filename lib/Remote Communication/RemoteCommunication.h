@@ -13,6 +13,8 @@
 #define MAX_TIME                180
 #define MAX_TIME_DIGITS         999  
 
+
+
 enum TemperatureFunctionType{constant, ramp};
 
 struct TemperatureSetpoint {

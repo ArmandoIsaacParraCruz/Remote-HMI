@@ -16,6 +16,7 @@ void HMI::runHMI()
     RemoteCommunication::beginRemoteCommunication();
     GraphicalUserInterface::beginGraphicalUserInterface();
     GraphicalUserInterface::displayUamLogo();
+    Serial.println(WiFi.macAddress());
     while(true)
     {
        mainMenu();
@@ -79,18 +80,16 @@ void HMI::mainMenu()
                     // Go to menu: defineExecutionSpecifications();
                     // Ir al menú: defineExecutionSpecifications();
                     defineExecutionSpecifications();
-                    continue_menu = false;
                 } else if (option == 2) {
                     // Go to menu: monitor_stirring_and_temperature();
                     // Ir al menú: monitor_stirring_and_temperature();
                     // monitor_stirring_and_temperature();
-                    continue_menu = false;
                 } else if (option == 3) {
-                    // Go to menu: communication settings();
-                    // Ir al menú: communication settings();
-                    // communication settings();
-                    continue_menu = false;
+                    // Go to menu: displayManualAdjustmentMenu;
+                    // Ir al menú: displayManualAdjustmentMenu();
+                    manualUserAdjustment();
                 }
+                continue_menu = false;
                 break;
 
             case 'C':
@@ -383,6 +382,8 @@ void HMI::setUpTemperatureFunctionTypeMenu(const uint8_t &currentProcess)
     }
     GraphicalUserInterface::clearMenuSpaceForSetUpSetpointsAndTimes();
 }
+
+
 void HMI::setUpTemperatureSetpointsMenus(const uint8_t &currentProcess)
 {
     if(processesSpecifications.temperatureSetpoints[currentProcess].tempFunction == constant) {
@@ -671,3 +672,14 @@ MenuNavigationOptions HMI::confirmAndTransmitConfiguredProcessesMenu()
     Keyboard::getValidKey(validKeys);
     return MenuNavigationOptions::Exit;
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void HMI::manualUserAdjustment()
+{
+    RemoteCommunication::sendProcessesConfigurated(processesSpecifications);
+}
+
+
+
