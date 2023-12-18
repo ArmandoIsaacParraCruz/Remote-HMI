@@ -53,7 +53,12 @@ class GraphicalUserInterface
         static void displayRPMInMonitorMultiHeaterStirrerMenu(uint16_t& RPM, uint8_t& i);
         static void displayTSIRInMonitorMultiHeaterStirrerMenu(float& temperatura);
         static void displayTimeInMonitorMultiHeaterStirrerMenu(uint32_t& time);
+
         static void displayManualUserAdjustmentMenuBackgroundElements();
+        static void displayTemperatureInManualUserAdjustmentMenu(uint16_t& temperature, uint8_t& i);
+        static void displayRPMInManualUserAdjustmentMenu(uint16_t& RPM, uint8_t& i);
+        static void displayTSIRInManualUserAdjustmentMenu(float& temperatura);
+       
         
     private:
         static TFT_eSPI lcd;

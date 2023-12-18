@@ -716,7 +716,7 @@ void HMI::monitorMultiHeaterStirrerMenu()
 void HMI::manualUserAdjustmentMenu()
 {
     char keyPressed = NO_KEY;
-    GraphicalUserInterface::manualUserAdjustmentMenuBackgroundElements();
+    GraphicalUserInterface::displayManualUserAdjustmentMenuBackgroundElements();
     uint32_t currentTime = millis();
     while (true)
     {
@@ -728,16 +728,16 @@ void HMI::manualUserAdjustmentMenu()
         if(millis() - currentTime >= 1000){
             Serial.println("Temperatura");
             for(uint8_t i = 0; i < NUMBER_OF_PLACES; ++i) {
-                uint16_t temperature = (uint16_t)RemoteCommunication::measurements.temperatures[i];
-                GraphicalUserInterface::displayTemperatureInMonitorMultiHeaterStirrerMenu(temperature, i);
+                uint16_t temperature = (uint16_t)RemoteCommunication::manualAdjustmentParameters.temperatures[i];
+                GraphicalUserInterface::displayTemperatureInManualUserAdjustmentMenu(temperature, i);
             }
             Serial.println("RPM");
             for(uint8_t i = 0; i < NUMBER_OF_PLACES; ++i) {
-                uint16_t RPM = (uint16_t)RemoteCommunication::measurements.RPM[i];
-                GraphicalUserInterface::displayRPMInMonitorMultiHeaterStirrerMenu(RPM, i);
+                uint16_t RPM = (uint16_t)RemoteCommunication::manualAdjustmentParameters.RPM[i];
+                GraphicalUserInterface::displayRPMInManualUserAdjustmentMenu(RPM, i);
             }
 
-            GraphicalUserInterface::displayTSIRInMonitorMultiHeaterStirrerMenu(RemoteCommunication::measurements.infraredSensorTemp);
+            GraphicalUserInterface::displayTSIRInManualUserAdjustmentMenu(RemoteCommunication::manualAdjustmentParameters.infraredSensorTemp);
             currentTime = millis();
         }
            

@@ -53,7 +53,7 @@ void IRAM_ATTR RemoteCommunication::OnDataRecv(const uint8_t *mac, const uint8_t
     }
 
     if(len == sizeof(manualAdjustmentParameters)) {
-        
+        memcpy(&manualAdjustmentParameters, incomingData, sizeof(manualAdjustmentParameters));
     }
     
    

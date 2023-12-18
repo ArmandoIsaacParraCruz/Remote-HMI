@@ -607,5 +607,55 @@ void GraphicalUserInterface::displayManualUserAdjustmentMenuBackgroundElements()
 {
 	lcd.fillScreen(MY_SKYBLUE);
 	
-	lcd.drawString("B: REGRESAR", 20, 205, FONT2);
+	lcd.setTextColor(MY_BLACK);
+	int32_t imageX = 20,imageY = 0, posX = 27;
+	lcd.pushImage(imageX, imageY, imageWidth, imageHeight, multiHeaterStirrerImage);
+	lcd.setTextColor(MY_BLACK);
+	lcd.setFreeFont(FF47);
+
+	for(uint8_t currentPlace = 0; currentPlace < 6; ++currentPlace, posX+=50) {
+		lcd.drawString((String)(currentPlace+1),posX + 7, 6);
+	}
+
+	lcd.fillRect(0, 85, 320, 115, MY_WHITE);
+	lcd.drawLine(25,85,25,170,MY_BLACK);
+	lcd.drawLine(75,85,75,170,MY_BLACK);
+	lcd.drawLine(125,85,125,170,MY_BLACK);
+	lcd.drawLine(175,85,175,170,MY_BLACK);
+	lcd.drawLine(225,85,225,170,MY_BLACK);
+	lcd.drawLine(275,85,275,170,MY_BLACK);
+
+	lcd.drawLine(0,125,320,125,MY_BLACK);
+	lcd.drawLine(0,170,320,170, MY_BLACK);
+
+	lcd.setFreeFont(TT1);
+	lcd.drawCircle(4, 95, 2, MY_BLACK);
+	lcd.drawString("C", 10, 95, FONT2);
+	lcd.drawString("RPM", 0, 140, FONT2);
+	lcd.drawString("TEMP. SIR:", 5, 180, FONT2);
+	lcd.drawCircle(130, 180, 2, MY_BLACK);
+	lcd.drawString("C", 135,180,FONT2);
+	lcd.drawString("B: REGRESAR", 10, 210, FONT2);
 }
+
+void GraphicalUserInterface::displayTemperatureInManualUserAdjustmentMenu(uint16_t &temperature, uint8_t &i)
+{
+	uint16_t xpos = 30, ypos = 95, spacing = 50;
+	lcd.fillRect(xpos + i*spacing , ypos, 40, 15, MY_WHITE);
+	lcd.drawString((String)temperature,xpos + i*spacing , ypos, FONT2);
+}
+
+void GraphicalUserInterface::displayRPMInManualUserAdjustmentMenu(uint16_t &RPM, uint8_t &i)
+{
+	uint16_t xpos = 30, ypos = 140, spacing = 50;
+	lcd.fillRect(xpos + i*spacing , ypos, 40, 15, MY_WHITE);
+	lcd.drawString((String)RPM,xpos + i*spacing , ypos, FONT2);
+}
+
+void GraphicalUserInterface::displayTSIRInManualUserAdjustmentMenu(float &temperatura)
+{
+	lcd.fillRect(80 , 180, 45, 15, MY_WHITE);
+	lcd.drawString((String)temperatura, 80, 180, FONT2);
+}
+
+
