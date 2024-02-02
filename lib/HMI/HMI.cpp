@@ -79,15 +79,15 @@ void HMI::mainMenu()
                 if (option == 1) {
                     // Go to menu: defineExecutionSpecifications();
                     // Ir al menú: defineExecutionSpecifications();
-                    defineExecutionSpecificationsMenu();
+                    defineProcessSpecificationsMenu();
                 } else if (option == 2) {
                     // Go to menu: monitorMultiHeaterStirrer();
                     // Ir al menú: monitorMultiHeaterStirrer();
-                    monitorMultiHeaterStirrerMenu();
+                    monitorConfiguredProcessesMenu();
                 } else if (option == 3) {
                     // Go to menu: displayManualAdjustmentMenu;
                     // Ir al menú: displayManualAdjustmentMenu();
-                    manualUserAdjustmentMenu();
+                    monitorManualAdjustmentMenu();
                 }
                 continue_menu = false;
                 break;
@@ -115,7 +115,7 @@ void HMI::mainMenu()
  * This function implements the menus to define the execution specifications
  * Esta función implementa los menús para definir las especificaciones de ejecución
 */
-void HMI::defineExecutionSpecificationsMenu()
+void HMI::defineProcessSpecificationsMenu()
 {
     initializeProcessesSpecificationsStruct();
     uint8_t currentMenu = 0;
@@ -676,7 +676,7 @@ MenuNavigationOptions HMI::confirmAndTransmitConfiguredProcessesMenu()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void HMI::monitorMultiHeaterStirrerMenu()
+void HMI::monitorConfiguredProcessesMenu()
 {  
     char keyPressed = NO_KEY;
     GraphicalUserInterface::monitorMultiHeaterStirrerMenuBackgroundElements();
@@ -713,7 +713,7 @@ void HMI::monitorMultiHeaterStirrerMenu()
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void HMI::manualUserAdjustmentMenu()
+void HMI::monitorManualAdjustmentMenu()
 {
     char keyPressed = NO_KEY;
     GraphicalUserInterface::displayManualUserAdjustmentMenuBackgroundElements();

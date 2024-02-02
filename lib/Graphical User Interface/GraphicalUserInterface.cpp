@@ -56,10 +56,10 @@ void GraphicalUserInterface::highlightCurrentOptionInMainMenu(const uint8_t &opt
     lcd.drawString("CONFIG. AGITACION", 70, 25);
     lcd.drawString("Y CALENTAMIENTO", 80, 40);
 
-    lcd.drawString("MONITOREAR", 110, 95);
-    lcd.drawString("MULTIPARRILLA", 95, 110);
+    lcd.drawString("MONITOREAR PROCESOS", 60, 95);
+    lcd.drawString("CONFIGURADOS", 95, 110);
 
-    lcd.drawString("VISUALIZAR AJUSTE",70, 165);
+    lcd.drawString("MONITOREAR AJUSTE",70, 165);
 	lcd.drawString("      MANUAL",70, 180);
 }
 
