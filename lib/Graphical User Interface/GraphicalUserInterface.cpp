@@ -192,9 +192,9 @@ void GraphicalUserInterface::displayCurrentProcessTemperatureFunctionType(bool t
 {
 	lcd.setFreeFont(TT1);
 	lcd.setTextColor(MY_BLACK);
-	lcd.drawString("FUNC. DE TEMPERATURA:", 30, 100, FONT2);
+	lcd.drawString("FUNC. DE CALENTAMIENTO:", 30, 100, FONT2);
 	if(tempFunction) {
-		lcd.drawString("CONSTANTE", 200, 100, FONT2);
+		lcd.drawString("CONSTANTE", 210, 100, FONT2);
 	} else {
 		lcd.drawString("RAMPA", 230, 100, FONT2);
 	}
@@ -209,7 +209,7 @@ void GraphicalUserInterface::displayCurrentProcessTemperatureFunctionType(bool t
 	lcd.drawString("A: SELECCIONAR", 10, 205, FONT2);
 	lcd.drawString("D:", 190, 205, FONT2);
 	lcd.fillTriangle(213, 207, 223, 207, 218, 217, MY_BLACK);
-	lcd.drawString("ESCOJA UNA FUNC. DE TEMPERATURA", 50, 100, FONT2);
+	lcd.drawString("ESCOJA UNA FUNC. DE CALENTAMIENTO", 50, 100, FONT2);
 	lcd.drawString("Y PRESIONE 'A' PARA SELECCIONARLA", 50, 120, FONT2);
 	lcd.drawString("CONSTANTE", 70, 150, FONT2);
 	lcd.drawString("RAMPA", 70, 170, FONT2);
@@ -522,8 +522,9 @@ void GraphicalUserInterface::displayTransmissionErrorMessage()
 {
 	lcd.fillRect(10, 10, 300, 180, MY_WHITE);
 	lcd.drawString("HUBO UN ERROR PARA COMUNICARSE CON", 30, 20, FONT2);
-	lcd.drawString("LA MULTIPARRILLA. VERIFIQUE QUE", 45, 40, FONT2);
-	lcd.drawString("LA MULTIPARRILLA SE ENCUENTRE ENCENDIDA", 15, 60, FONT2);
+	lcd.drawString("LA MULTIPARRILLA. VERIFIQUE QUE LA", 30, 40, FONT2);
+	lcd.drawString("MULTIPARRILLA SE ENCUENTRE ENCENDIDA", 30, 60, FONT2);
+	lcd.drawString("Y EN MODO AUTOMATICO", 75, 80, FONT2);
 	lcd.drawString("PRESIONE 'C' PARA REINTENTAR", 60, 150, FONT2);
 }
 
