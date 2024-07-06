@@ -328,7 +328,7 @@ void GraphicalUserInterface::displaySetUpStirringSetpointsMenuBackgroundElements
 	lcd.setTextColor(MY_BLACK);
 	lcd.drawString("A: LISTO", 10, 205, FONT2);
 	lcd.drawString("B: BORRAR VALOR", 190, 205, FONT2);
-	lcd.drawString("INGRESE UN VALOR ENTRE 0 Y 1200 RPM", 30, 100, FONT2);
+	lcd.drawString("INGRESE UN VALOR ENTRE 0 Y 800 RPM", 30, 100, FONT2);
 	lcd.drawString("Y LUEGO PRESIONE 'A'", 80, 120, FONT2);
 	lcd.drawLine(122,160,125,157, MY_BLACK);
 	lcd.drawString("AGITACION: ", 70, 160, FONT2);
@@ -354,7 +354,7 @@ void GraphicalUserInterface::displaySetUpConstantTemperatureMenuBackgroundElemen
 	lcd.setTextColor(MY_BLACK);
 	lcd.drawString("A: LISTO", 10, 205, FONT2);
 	lcd.drawString("B: BORRAR VALOR", 190, 205, FONT2);
-	lcd.drawString("INGRESE UN VALOR QUE NO SUPERE LOS 300", 20, 100, FONT2);
+	lcd.drawString("INGRESE UN VALOR QUE NO SUPERE LOS 200", 20, 100, FONT2);
 	lcd.drawString("GRADOS CELSIOUS. LUEGO, PRESIONE 'A'.", 30, 120, FONT2);
 	lcd.drawString("TEMPERATURA:", 50, 160, FONT2);
 }
@@ -408,7 +408,7 @@ void GraphicalUserInterface::displaySetUpRampTemperatureMenuBackgroundElements()
 	lcd.fillTriangle(213, 207, 223, 207, 218, 217, MY_BLACK);
 	lcd.drawString("B: BORRAR VALOR", 10, 225, FONT2);
 	lcd.drawString("INGRESE DOS VALORES QUE NO SUPERE LOS", 20, 100, FONT2);
-	lcd.drawString("300 GRADOS CELSIOUS. LUEGO, PRESIONE 'A'.", 20, 120, FONT2);
+	lcd.drawString("200 GRADOS CELSIOUS. LUEGO, PRESIONE 'A'.", 20, 120, FONT2);
 	lcd.drawString("TEMP. INICIAL > TEMP. FINAL", 60, 140, FONT2);
 	lcd.drawString("TEMP. INICIAL: ", 40, 160, FONT2);
 	lcd.drawString("TEMP. FINAL: ", 40, 180, FONT2);

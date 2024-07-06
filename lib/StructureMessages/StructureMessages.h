@@ -3,10 +3,10 @@
 
 #define NUMBER_OF_PLACES        6
 #define NUMBER_OF_PROCESS       15
-#define MAX_TEMPERATURE         300
+#define MAX_TEMPERATURE         200
 #define MAX_TEMPERATURE_DIGIT   999
-#define MAX_RPM                 1200
-#define MAX_RPM_DIGITS          9999
+#define MAX_RPM                 800
+#define MAX_RPM_DIGITS          999
 #define MAX_TIME                180
 #define MAX_TIME_DIGITS         999  
 
