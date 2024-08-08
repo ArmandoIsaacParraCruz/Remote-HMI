@@ -15,7 +15,9 @@ void HMI::runHMI()
 {
     RemoteCommunication::beginRemoteCommunication();
     GraphicalUserInterface::beginGraphicalUserInterface();
+    Keyboard::begin();
     GraphicalUserInterface::displayUamLogo();
+    
     Serial.println(WiFi.macAddress());
     while(true)
     {

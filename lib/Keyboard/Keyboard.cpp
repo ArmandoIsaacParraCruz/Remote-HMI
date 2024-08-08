@@ -1,16 +1,29 @@
 #include "keyboard.h"
 
-byte Keyboard::rowsPins[ROWS] = {4, 13, 14, 27};
-byte Keyboard::columnsPins[COLUMNS] = {26, 25, 33, 32};
+byte Keyboard::rowPins[ROWS] = {4, 13, 14, 27};
+byte Keyboard::colPins[COLS] = {26, 25, 33, 32};
 
-char Keyboard::keys[ROWS][COLUMNS] = {
+char Keyboard::keys[ROWS][COLS] = {
             {'1','2','3','A'},
             {'4','5','6','B'},
             {'7','8','9','C'},
             {'*','0','#','D'}
         };
 
-Keypad Keyboard::keypad{makeKeymap(keys), rowsPins, columnsPins, ROWS, COLUMNS};
+void Keyboard::begin() 
+{
+    // Set up the row pins as outputs
+  for (int i = 0; i < ROWS; i++) {
+    pinMode(rowPins[i], OUTPUT);
+    digitalWrite(rowPins[i], LOW); // Keep rows LOW
+  }
+
+  // Set up the column pins as inputs
+  for (int i = 0; i < COLS; i++) {
+    pinMode(colPins[i], INPUT);
+  }
+
+}
 
 
 /**
@@ -22,10 +35,11 @@ char Keyboard::getValidKey(std::vector<char> &validKeys)
     char keyPressed = NO_KEY;
     // Wait for a key press
     while (true) {
-        keyPressed = keypad.getKey();
+        keyPressed = getKey();
         
         for(char& validKey: validKeys) {
             if(keyPressed == validKey) {
+                Serial.println(keyPressed);
                 return keyPressed;
             } 
         }
@@ -41,7 +55,7 @@ char Keyboard::ignoreIvalidKeys(std::vector<char> &invalidKeys)
     char keyPressed = NO_KEY;
     bool keyPressedValid = false; 
     while(!keyPressedValid){  
-        keyPressed = keypad.getKey();
+        keyPressed = getKey();
         
         if(keyPressed != NO_KEY) {
             keyPressedValid = true;
@@ -50,9 +64,31 @@ char Keyboard::ignoreIvalidKeys(std::vector<char> &invalidKeys)
             }
         } 
     }
+    Serial.println(keyPressed);
    return keyPressed; 
 }
+
 char Keyboard::getKey()
 {
-    return keypad.getKey();
+  char key;
+  for (int row = 0; row < ROWS; row++) {
+    // Set the current row to HIGH
+    digitalWrite(rowPins[row], HIGH);
+
+    // Read the columns
+    for (int col = 0; col < COLS; col++) {
+      if (digitalRead(colPins[col]) == HIGH) {
+        //Serial.print("Key pressed: ");
+        //Serial.println(keys[row][col]);
+        key = keys[row][col];
+        // Wait until the key is released
+        while (digitalRead(colPins[col]) == HIGH);
+      }
+    }
+
+    // Restore the row to LOW
+    digitalWrite(rowPins[row], LOW);
+  }
+
+  return key;
 }

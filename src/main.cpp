@@ -1,18 +1,38 @@
 #include <Arduino.h>
+#include <Ticker.h>
 #include "HMI.h"
 
 //40:91:51:AB:1B:C0
+
+const int ledPin = 2; // Pin donde está conectado el LED
+
+// Variable para almacenar el estado del LED
+bool ledState = false;
+
+// Crear una instancia de Ticker
+Ticker ticker;
+
+void toggleLED() {
+  ledState = !ledState; // Cambia el estado del LED
+  digitalWrite(ledPin, ledState); // Actualiza el estado del LED
+}
+
+
 
 HMI hmi{};
 
 void setup() {
   Serial.begin(115200);
+  // Configuración del pin del LED como salida
+  pinMode(ledPin, OUTPUT);
+
+  // Configurar el ticker para que llame a la función toggleLED cada segundo
+  ticker.attach(1, toggleLED); // 1 segundo
 }
 
 void loop() {
   hmi.runHMI();
 }
-
 
 
 /*

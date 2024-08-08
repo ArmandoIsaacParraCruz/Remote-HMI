@@ -4,11 +4,20 @@ TFT_eSPI GraphicalUserInterface::lcd{};
 
 void GraphicalUserInterface::beginGraphicalUserInterface()
 {
+	Serial.println("Hola");
 	lcd.begin(2);
     lcd.invertDisplay(false);
     lcd.setRotation(1);
     lcd.fillScreen(MY_WHITE);
     lcd.setSwapBytes(true);  
+		// Verifica si la pantalla está funcionando correctamente
+	lcd.drawPixel(0, 0, TFT_WHITE);
+	if (lcd.readPixel(0, 0) == TFT_WHITE) {
+		Serial.println("OKAY");
+	} else {
+		Serial.println("BAD");
+	}
+	
 }
 
 void GraphicalUserInterface::displayUamLogo()
