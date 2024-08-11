@@ -4,7 +4,7 @@
 #define ROWS  4 
 #define COLS 4
 
-const char NO_KEY = ' ';
+const char NO_KEY = '\0';
 
 class Keyboard
 {

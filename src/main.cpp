@@ -2,7 +2,7 @@
 #include <Ticker.h>
 #include "HMI.h"
 
-//40:91:51:AB:1B:C0
+//A0:B7:65:4B:B9:D4
 
 const int ledPin = 2; // Pin donde está conectado el LED
 

@@ -32,6 +32,7 @@ void Keyboard::begin()
 */
 char Keyboard::getValidKey(std::vector<char> &validKeys)
 {
+  Serial.println("valid");
     char keyPressed = NO_KEY;
     // Wait for a key press
     while (true) {
@@ -52,6 +53,7 @@ char Keyboard::getValidKey(std::vector<char> &validKeys)
 */
 char Keyboard::ignoreIvalidKeys(std::vector<char> &invalidKeys) 
 { 
+  Serial.println("Invalid");
     char keyPressed = NO_KEY;
     bool keyPressedValid = false; 
     while(!keyPressedValid){  
@@ -70,7 +72,7 @@ char Keyboard::ignoreIvalidKeys(std::vector<char> &invalidKeys)
 
 char Keyboard::getKey()
 {
-  char key;
+  char key = NO_KEY;
   for (int row = 0; row < ROWS; row++) {
     // Set the current row to HIGH
     digitalWrite(rowPins[row], HIGH);
